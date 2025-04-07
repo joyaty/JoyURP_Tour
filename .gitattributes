@@ -1,0 +1,13 @@
+# 在 Windows 上默认 git 配置会自动将文本文件中的 \n(LF)转换成 \r\n(CRLF)，但是 Unity 保存文本文件的时候总是使用的 \n。
+# 这样有一个问题就是你修改了 .meta 文件以后就算再变回原来的设置，git 里面也会显示其被修改过了。因为 git 认为他是文本所以把里面的换行改成了 \r\n，
+# 但是 Unity 保存资源的时候又写的是 \n，这样 git 又认为它变了。在项目根目录建立 .gitattributes 文件如下:
+* text=auto
+# keep LF on unity files
+*.asset text eol=lf
+*.meta text eol=lf
+*.prefab text eol=lf
+*.unity text eol=lf
+*.json text eol=lf
+*.anim text eol=lf
+*.controller text eol=lf
+*.mat text eol=lf
