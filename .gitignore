@@ -76,3 +76,4 @@ crashlytics-build.properties
 
 # ShaderlabVSCode
 /[Aa]ssets/ShaderlabVSCode
+# /[Aa]ssets/ShaderlabVSCode.meta
