@@ -4,6 +4,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
+using System;
 
 namespace Joy.ShaderEditor
 {
@@ -38,6 +39,16 @@ namespace Joy.ShaderEditor
             /// 凹凸(法线)贴图
             /// </summary>
             internal static readonly string BUMP_MAP = "_BumpMap";
+
+            /// <summary>
+            /// 渐变纹理
+            /// </summary>
+            internal static readonly string RAMP_MAP = "_RampMap";
+
+            /// <summary>
+            /// 是否启用渐变纹理开关
+            /// </summary>
+            internal static readonly string ENABLE_RAMP_MAP = "_EnableRampMap";
         }
 
         /// <summary>
@@ -61,6 +72,22 @@ namespace Joy.ShaderEditor
             /// 法线贴图标签
             /// </summary>
             internal static readonly GUIContent NORMAL = new GUIContent("Normal");
+
+            /// <summary>
+            /// 渐变纹理配置项
+            /// </summary>
+            internal static readonly GUIContent RAMPTEX = new GUIContent("Ramp Texture");
+
+            /// <summary>
+            /// 是否启用渐变纹理标签
+            /// </summary>
+            internal static readonly GUIContent ENABLE_RAMPTEX = new GUIContent("Enable RampTex");
+        }
+
+        internal enum EnumRampMapOption
+        {
+            DISABLE = 0,
+            ENABLE = 1,
         }
 
         private MaterialProperty m_DiffuseMapProp = null;
@@ -68,6 +95,8 @@ namespace Joy.ShaderEditor
         private MaterialProperty m_SpecularColorProp = null;
         private MaterialProperty m_GlossyProp = null;
         private MaterialProperty m_NormalMapProp = null;
+        private MaterialProperty m_RampMapProp = null;
+        private MaterialProperty m_EnableRampMapProp = null;
 
         /// <summary>
         /// 绑定Shader中声明的材质属性
@@ -80,6 +109,8 @@ namespace Joy.ShaderEditor
             m_SpecularColorProp = FindProperty(JoySimpleLitPropDefine.SPECULAR_COLOR, properties, false);
             m_GlossyProp = FindProperty(JoySimpleLitPropDefine.GLOSSY, properties, false);
             m_NormalMapProp = FindProperty(JoySimpleLitPropDefine.BUMP_MAP, properties, false);
+            m_RampMapProp = FindProperty(JoySimpleLitPropDefine.RAMP_MAP, properties, false);
+            m_EnableRampMapProp = FindProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP, properties, false);
             base.FindProperties(properties);
         }
 
@@ -93,6 +124,12 @@ namespace Joy.ShaderEditor
             { // 根据是否有配置法线贴图决定是否开启 _ENABLE_NORMAL_MAP 
                 bool hasValue = material.GetTexture(JoySimpleLitPropDefine.BUMP_MAP);
                 CoreUtils.SetKeyword(material, "_ENABLE_NORMAL_MAP", hasValue);
+            }
+            if (material.HasProperty(JoySimpleLitPropDefine.RAMP_MAP))
+            { // 开关控制是否开启渐变纹理
+                EnumRampMapOption option = material.HasProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP) 
+                    ? (EnumRampMapOption)material.GetFloat(JoySimpleLitPropDefine.ENABLE_RAMP_MAP) : EnumRampMapOption.ENABLE;
+                CoreUtils.SetKeyword(material, "_ENABLE_RAMP_MAP", option == EnumRampMapOption.ENABLE);
             }
         }
 
@@ -129,10 +166,26 @@ namespace Joy.ShaderEditor
             { // 所有的纹理坐标使用相同的偏移参数
                 DrawTileOffset(materialEditor, m_DiffuseMapProp);
             }
+            if (m_RampMapProp != null)
+            {
+                EnumRampMapOption rampMapOption = (EnumRampMapOption)m_EnableRampMapProp.floatValue;
+                EditorGUI.BeginDisabledGroup(rampMapOption == EnumRampMapOption.DISABLE);
+                materialEditor.TexturePropertySingleLine(JoySimpleLitPropGUI.RAMPTEX, m_RampMapProp);
+                EditorGUI.EndDisabledGroup();
+            }
         }
 
         public override void DrawAdvancedOptions(Material material)
         {
+            EnumRampMapOption rampMapOption = (EnumRampMapOption)m_EnableRampMapProp.floatValue;
+            EditorGUI.showMixedValue = m_EnableRampMapProp.hasMixedValue;
+            EditorGUI.BeginChangeCheck();
+            bool isToggle = EditorGUILayout.Toggle(JoySimpleLitPropGUI.ENABLE_RAMPTEX, rampMapOption == EnumRampMapOption.ENABLE);
+            if (EditorGUI.EndChangeCheck())
+            {
+                m_EnableRampMapProp.floatValue = (float)(isToggle ? EnumRampMapOption.ENABLE : EnumRampMapOption.DISABLE);
+            }
+            EditorGUI.showMixedValue = false;
             base.DrawAdvancedOptions(material);
         }
     }

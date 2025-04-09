@@ -3,12 +3,14 @@ Shader "JoyURP/JoyURP_SimpleLit"
 {
     Properties
     {
-        [MainTexture] _DiffuseMap ("Diffuse Map", 2D) = "white" { }// 漫反射贴图
+        [MainTexture] _DiffuseMap ("Diffuse Map", 2D) = "white" { }// 漫反射纹理
         [MainColor] _DiffuseColor ("Diffuse Color", Color) = (1.0, 1.0, 1.0, 1.0) // 漫反射颜色
-        _BumpMap ("Normal Map", 2D) = "bump" { }// 法线贴图
+        _BumpMap ("Normal Map", 2D) = "bump" { }// 法线纹理
         _SpecColor ("Specular Color", Color) = (1.0, 1.0, 1.0, 1.0) // 高光颜色
         _Glossy ("Glossy", Range(0, 1)) = 0.5 // 光滑度
         
+        _RampMap ("Ramp Map", 2D) = "bump" { }// 渐变纹理
+        _EnableRampMap ("Enable Ramp Map", Float) = 0.0 // 使用启用渐变纹理
         // _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
 
@@ -29,7 +31,8 @@ Shader "JoyURP/JoyURP_SimpleLit"
             #pragma fragment FragmentMain
 
             // 材质Keywords
-            #pragma shader_feature_local _ENABLE_NORMAL_MAP // 是否启用法线贴图
+            #pragma shader_feature_local _ENABLE_NORMAL_MAP // 是否启用法线纹理
+            #pragma shader_feature_local_fragment _ENABLE_RAMP_MAP // 是否启用渐变纹理
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -41,6 +44,10 @@ Shader "JoyURP/JoyURP_SimpleLit"
             // 声明法线纹理和采样器
             TEXTURE2D(_BumpMap);
             SAMPLER(sampler_BumpMap);
+            
+            // 声明渐变纹理和采样器
+            TEXTURE2D(_RampMap);
+            SAMPLER(sampler_RampMap);
 
             // 声明材质相关的常量缓冲区
             CBUFFER_START(UnityPerMaterial)
@@ -104,7 +111,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 Light mainLight = GetMainLight();
                 float3 l = normalize(mainLight.direction);
                 #if _ENABLE_NORMAL_MAP
-                    half4 normal4TS = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, input.uv); 
+                    half4 normal4TS = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, input.uv);
                     half3 normalTS = UnpackNormal(normal4TS); // 法线纹理的法线数据为切线空间法线
                     float sign = input.tangentWS.w;
                     float3 bitangentWS = cross(input.normalWS.xyz, input.tangentWS.xyz) * sign;
@@ -115,9 +122,15 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 #endif
                 float3 r = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 // 漫反射项
-                float NdotL = saturate(dot(n, l));
                 half3 albedo = SAMPLE_TEXTURE2D(_DiffuseMap, sampler_DiffuseMap, input.uv).xyz * _DiffuseColor.xyz;
-                half3 diffuse = mainLight.color * NdotL * albedo.xyz;
+                #if _ENABLE_RAMP_MAP
+                    float halfLambert = dot(n, l) * 0.5 + 0.5; // 半兰伯特模型，将点积结果从[-1,1]变换到[0,1]
+                    half3 rampFactor = SAMPLE_TEXTURE2D(_RampMap, sampler_RampMap, float2(halfLambert, halfLambert)).xyz;
+                    half3 diffuse = mainLight.color * rampFactor * albedo.xyz;
+                #else
+                    float NdotL = saturate(dot(n, l)); // 向量点积结果[-1, 1],通过saturate将结果裁剪(负值直接取0)到[0,1]. (负方向入射的光线是无意义的)
+                    half3 diffuse = mainLight.color * NdotL * albedo.xyz;
+                #endif
                 // 高光项
                 float3 h = normalize(l + r); // 中间向量
                 float NdotH = saturate(dot(n, h)); // 法线和中间向量的夹角余弦
