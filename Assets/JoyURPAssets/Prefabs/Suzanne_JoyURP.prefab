@@ -11,13 +11,13 @@ PrefabInstance:
     - target: {fileID: 6276760200497224998, guid: 105b55ab5c7ef4b959f8d94d33291cf6,
         type: 3}
       propertyPath: m_Name
-      value: Suzanne Variant
+      value: Suzanne_JoyURP
       objectReference: {fileID: 0}
     - target: {fileID: 6344510983228738628, guid: 105b55ab5c7ef4b959f8d94d33291cf6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f8d0125ee4f1f41db9275921e5b4b010, type: 2}
+      objectReference: {fileID: 2100000, guid: dbbdbab7cefe99142aa0aba554034da5, type: 2}
     - target: {fileID: 7945163755059188734, guid: 105b55ab5c7ef4b959f8d94d33291cf6,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -10,7 +10,10 @@ Shader "JoyURP/JoyURP_SimpleLit"
         _Glossy ("Glossy", Range(0, 1)) = 0.5 // 光滑度
         
         _RampMap ("Ramp Map", 2D) = "bump" { }// 渐变纹理
-        _EnableRampMap ("Enable Ramp Map", Float) = 0.0 // 使用启用渐变纹理
+        _EnableRampMap ("Enable Ramp Map", Float) = 0.0 // 启用渐变纹理
+
+        _AlphaTest("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
+        _ApphaThreshold("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
         // _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
 
@@ -33,6 +36,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
             // 材质Keywords
             #pragma shader_feature_local _ENABLE_NORMAL_MAP // 是否启用法线纹理
             #pragma shader_feature_local_fragment _ENABLE_RAMP_MAP // 是否启用渐变纹理
+            #pragma shader_feature_local_fragment _ENABLE_ALPHA_TEST // 是否启用透明度测试
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -55,6 +59,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 half4 _DiffuseColor;
                 half4 _SpecColor;
                 float _Glossy;
+                float _ApphaThreshold;
             CBUFFER_END
             
             // 顶点属性(顶点着色器的输入)
@@ -108,6 +113,10 @@ Shader "JoyURP/JoyURP_SimpleLit"
             // 像素着色器入口
             half4 FragmentMain(Varyings input) : SV_TARGET
             {
+                half4 albedoMap = SAMPLE_TEXTURE2D(_DiffuseMap, sampler_DiffuseMap, input.uv);
+                #if _ENABLE_ALPHA_TEST
+                clip(albedoMap.a - _ApphaThreshold);
+                #endif
                 Light mainLight = GetMainLight();
                 float3 l = normalize(mainLight.direction);
                 #if _ENABLE_NORMAL_MAP
@@ -122,7 +131,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 #endif
                 float3 r = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 // 漫反射项
-                half3 albedo = SAMPLE_TEXTURE2D(_DiffuseMap, sampler_DiffuseMap, input.uv).xyz * _DiffuseColor.xyz;
+                half3 albedo = albedoMap.xyz * _DiffuseColor.xyz;
                 #if _ENABLE_RAMP_MAP
                     float halfLambert = dot(n, l) * 0.5 + 0.5; // 半兰伯特模型，将点积结果从[-1,1]变换到[0,1]
                     half3 rampFactor = SAMPLE_TEXTURE2D(_RampMap, sampler_RampMap, float2(halfLambert, halfLambert)).xyz;

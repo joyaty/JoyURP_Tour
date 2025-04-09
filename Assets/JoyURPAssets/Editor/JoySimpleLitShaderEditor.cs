@@ -4,7 +4,6 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
-using System;
 
 namespace Joy.ShaderEditor
 {
@@ -49,6 +48,16 @@ namespace Joy.ShaderEditor
             /// 是否启用渐变纹理开关
             /// </summary>
             internal static readonly string ENABLE_RAMP_MAP = "_EnableRampMap";
+
+            /// <summary>
+            /// 是否开启AlphaTest
+            /// </summary>
+            internal static readonly string ENABLE_ALPHA_TEST = "_AlphaTest";
+
+            /// <summary>
+            /// AlphaTest的临界值
+            /// </summary>
+            internal static readonly string ALPHA_TEST_THRESHOLD = "_ApphaThreshold";
         }
 
         /// <summary>
@@ -82,9 +91,20 @@ namespace Joy.ShaderEditor
             /// 是否启用渐变纹理标签
             /// </summary>
             internal static readonly GUIContent ENABLE_RAMPTEX = new GUIContent("Enable RampTex");
+
+            /// <summary>
+            /// 是否开启AlphaTest标签
+            /// </summary>
+            internal static readonly GUIContent ENABLE_ALPHATEST = new GUIContent("Alpha Test");
         }
 
         internal enum EnumRampMapOption
+        {
+            DISABLE = 0,
+            ENABLE = 1,
+        }
+
+        internal enum EnumAlphaTestOption
         {
             DISABLE = 0,
             ENABLE = 1,
@@ -97,6 +117,8 @@ namespace Joy.ShaderEditor
         private MaterialProperty m_NormalMapProp = null;
         private MaterialProperty m_RampMapProp = null;
         private MaterialProperty m_EnableRampMapProp = null;
+        private MaterialProperty m_EnableAlphaTestProp = null;
+        private MaterialProperty m_AlphaTestThresholdProp = null;
 
         /// <summary>
         /// 绑定Shader中声明的材质属性
@@ -111,6 +133,8 @@ namespace Joy.ShaderEditor
             m_NormalMapProp = FindProperty(JoySimpleLitPropDefine.BUMP_MAP, properties, false);
             m_RampMapProp = FindProperty(JoySimpleLitPropDefine.RAMP_MAP, properties, false);
             m_EnableRampMapProp = FindProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP, properties, false);
+            m_EnableAlphaTestProp = FindProperty(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST, properties, false);
+            m_AlphaTestThresholdProp = FindProperty(JoySimpleLitPropDefine.ALPHA_TEST_THRESHOLD, properties, false);
             base.FindProperties(properties);
         }
 
@@ -127,14 +151,46 @@ namespace Joy.ShaderEditor
             }
             if (material.HasProperty(JoySimpleLitPropDefine.RAMP_MAP))
             { // 开关控制是否开启渐变纹理
-                EnumRampMapOption option = material.HasProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP) 
+                EnumRampMapOption option = material.HasProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP)
                     ? (EnumRampMapOption)material.GetFloat(JoySimpleLitPropDefine.ENABLE_RAMP_MAP) : EnumRampMapOption.ENABLE;
                 CoreUtils.SetKeyword(material, "_ENABLE_RAMP_MAP", option == EnumRampMapOption.ENABLE);
+            }
+            if (material.HasProperty(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST))
+            { // 是否开启AlphaTest
+                EnumAlphaTestOption option = (EnumAlphaTestOption)material.GetFloat(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST);
+                CoreUtils.SetKeyword(material, "_ENABLE_ALPHA_TEST", option == EnumAlphaTestOption.ENABLE);
+                int renderQueue = material.shader.renderQueue; // 默认使用shader的渲染队列
+                if (option == EnumAlphaTestOption.ENABLE)
+                {
+                    renderQueue = (int)RenderQueue.AlphaTest;
+                }
+                else if (option == EnumAlphaTestOption.DISABLE)
+                {
+                    renderQueue = (int)RenderQueue.Geometry;
+                }
+                material.renderQueue = renderQueue;
             }
         }
 
         public override void DrawSurfaceOptions(Material material)
         {
+            if (m_EnableAlphaTestProp != null)
+            {
+                EnumAlphaTestOption option = (EnumAlphaTestOption)m_EnableAlphaTestProp.floatValue;
+                EditorGUI.BeginChangeCheck();
+                bool isToggle = EditorGUILayout.Toggle(JoySimpleLitPropGUI.ENABLE_ALPHATEST, option == EnumAlphaTestOption.ENABLE);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    m_EnableAlphaTestProp.floatValue = (float)(isToggle ? EnumAlphaTestOption.ENABLE : EnumAlphaTestOption.DISABLE);
+                }
+                bool isDisable = (EnumAlphaTestOption)m_EnableAlphaTestProp.floatValue == EnumAlphaTestOption.DISABLE;
+                if (!isDisable)
+                {
+                    EditorGUI.BeginDisabledGroup((EnumAlphaTestOption)m_EnableAlphaTestProp.floatValue == EnumAlphaTestOption.DISABLE);
+                    materialEditor.RangeProperty(m_AlphaTestThresholdProp, "AlphaTest Threshold");
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
         }
 
         public override void DrawSurfaceInputs(Material material)
