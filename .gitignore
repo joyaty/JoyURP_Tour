@@ -77,3 +77,8 @@ crashlytics-build.properties
 # ShaderlabVSCode
 /[Aa]ssets/ShaderlabVSCode
 /[Aa]ssets/ShaderlabVSCode.meta
+
+# YooAsset cache folder
+/[Bb]undles
+/[Aa]ssets/[Ss]treamingAssets/yoo
+/[Aa]ssets/[Ss]treamingAssets/yoo.meta
