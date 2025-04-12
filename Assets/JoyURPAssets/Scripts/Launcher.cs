@@ -54,11 +54,11 @@ public class Launcher : MonoBehaviour
         yield return versionOperation;
         if (versionOperation.Status == EOperationStatus.Succeed)
         {
-            Debug.Log("资源版本请求成功!");
+            Debug.Log($"资源版本获取成功!, ReqVersion = {versionOperation.PackageVersion}");
         }
         else
         {
-            Debug.LogError("资源版本请求失败!");
+            Debug.LogError("资源版本获取失败!");
             yield break;
         }
 
@@ -66,11 +66,11 @@ public class Launcher : MonoBehaviour
         yield return updatePackageManifest;
         if (updatePackageManifest.Status == EOperationStatus.Succeed)
         {
-            Debug.Log("更新资源清单成功!");
+            Debug.Log($"获取资源清单!, PackageVersion = {package.GetPackageVersion()}");
         }
         else
         {
-            Debug.LogError("更新资源清单失败!");
+            Debug.LogError("获取资源清单失败!");
             yield break;
         }
         YooAssets.SetDefaultPackage(package);
@@ -176,6 +176,9 @@ public class Launcher : MonoBehaviour
             Debug.LogError("获取资源清单失败!");
             yield break;
         }
+
+        // var downloader = package.CreateResourceDownloader(10, 3);
+
         YooAssets.SetDefaultPackage(package);
         onSuccessCallBack?.Invoke();
     }

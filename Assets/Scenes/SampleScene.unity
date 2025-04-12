@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ba3a436f327eb544a23d42dc9be36d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playMode: 0
+  playMode: 1
 --- !u!4 &454953063
 Transform:
   m_ObjectHideFlags: 0
