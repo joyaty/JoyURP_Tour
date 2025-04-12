@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
@@ -7,10 +6,24 @@ public class Launcher : MonoBehaviour
 {
     private const string kDefaulePackage = "DefaultPackage";
 
+    public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+
     private void Awake()
     {
         YooAssets.Initialize();
-        StartCoroutine(InitPackageWithEditorMode(OnAssetModuleInitSuccess));
+        if (playMode == EPlayMode.EditorSimulateMode)
+        {
+            StartCoroutine(InitPackageWithEditorMode(OnAssetModuleInitSuccess));
+        }
+        else if (playMode == EPlayMode.OfflinePlayMode)
+        {
+            StartCoroutine(InitPackageWithOfflineMode(OnAssetModuleInitSuccess));
+        }
+        else if (playMode == EPlayMode.HostPlayMode)
+        {
+            StartCoroutine(InitPackageWithRemoteMode(OnAssetModuleInitSuccess));
+        }
+        
     }
 
     /// <summary>
@@ -68,15 +81,109 @@ public class Launcher : MonoBehaviour
     /// <summary>
     /// 离线单机模式，一般不热更
     /// </summary>
-    private void InitPackageWithOfflineMode()
+    private IEnumerator InitPackageWithOfflineMode(System.Action onSuccessCallBack)
     {
-
+        ResourcePackage package = YooAssets.TryGetPackage(kDefaulePackage);
+        if (package == null)
+        {
+            package = YooAssets.CreatePackage(kDefaulePackage);
+        }
+        OfflinePlayModeParameters initializeParameters = new OfflinePlayModeParameters();
+        initializeParameters.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+        InitializationOperation initializationOperation = package.InitializeAsync(initializeParameters);
+        yield return initializationOperation;
+        if (initializationOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log($"资源包初始化成功!");
+        }
+        else
+        {
+            Debug.LogError("资源包初始化失败!");
+            yield break;
+        }
+        RequestPackageVersionOperation versionOperation = package.RequestPackageVersionAsync();
+        yield return versionOperation;
+        if (versionOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log($"获取资源版本成功!, ReqVersion = {versionOperation.PackageVersion}");
+        }
+        else
+        {
+            Debug.LogError("获取资源版本失败!");
+            yield break;
+        }
+        UpdatePackageManifestOperation manifestOperation = package.UpdatePackageManifestAsync(versionOperation.PackageVersion);
+        yield return manifestOperation;
+        if (versionOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log($"获取资源清单成功!, PackageVersion = {package.GetPackageVersion()}");
+        }
+        else
+        {
+            Debug.LogError("获取资源清单失败!");
+            yield break;
+        }
+        YooAssets.SetDefaultPackage(package);
+        onSuccessCallBack?.Invoke();
     }
 
     /// <summary>
     /// 远程联机模式，一般会有热更功能
     /// </summary>
-    private void InitPackageWithRemoteMode()
+    private IEnumerator InitPackageWithRemoteMode(System.Action onSuccessCallBack)
+    {
+        ResourcePackage package = YooAssets.TryGetPackage(kDefaulePackage);
+        if (package == null)
+        {
+            package = YooAssets.CreatePackage(kDefaulePackage);
+        }
+        string remoteURL = "http://172.26.134.233:9081/App/v1.0/";
+        string fallbackURL = "http://172.26.134.233:9081/App/v1.0/";
+        IRemoteServices remoteServices = new RemoteServices(remoteURL, fallbackURL);
+        HostPlayModeParameters initializeParamters = new HostPlayModeParameters();
+        initializeParamters.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
+        initializeParamters.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+        InitializationOperation initializationOperation = package.InitializeAsync(initializeParamters);
+        yield return initializationOperation;
+        if (initializationOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log("资源包初始化成功!");
+        }
+        else
+        {
+            Debug.LogError("资源包初始化失败!");
+            yield break;
+        }
+        RequestPackageVersionOperation versionOperation = package.RequestPackageVersionAsync();
+        yield return versionOperation;
+        if (versionOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log($"获取资源版本成功!, ReqVersion = {versionOperation.PackageVersion}");
+        }
+        else
+        {
+            Debug.LogError("获取资源版本失败!");
+            yield break;
+        }
+        UpdatePackageManifestOperation manifestOperation = package.UpdatePackageManifestAsync(versionOperation.PackageVersion);
+        yield return manifestOperation;
+        if (manifestOperation.Status == EOperationStatus.Succeed)
+        {
+            Debug.Log($"获取资源清单成功!, PackageVersion = {package.GetPackageVersion()}");
+        }
+        else
+        {
+            Debug.LogError("获取资源清单失败!");
+            yield break;
+        }
+        YooAssets.SetDefaultPackage(package);
+        onSuccessCallBack?.Invoke();
+    }
+
+    /// <summary>
+    /// 小游戏模式
+    /// </summary>
+    private void InitPackageWithWebGLMode()
     {
 
     }
@@ -87,6 +194,28 @@ public class Launcher : MonoBehaviour
         if (handle.AssetObject != null)
         {
             Instantiate(handle.GetAssetObject<GameObject>());
+        }
+    }
+
+    private sealed class RemoteServices : IRemoteServices
+    {
+        public readonly string m_RemoteMainURL = null;
+        private readonly string m_FallbackURL = null;
+
+        public RemoteServices(string remoteMainURL, string fallbackURL)
+        {
+            m_RemoteMainURL = remoteMainURL;
+            m_FallbackURL = fallbackURL;
+        }
+
+        public string GetRemoteFallbackURL(string fileName)
+        {
+            return $"{m_FallbackURL}/{fileName}";
+        }
+
+        public string GetRemoteMainURL(string fileName)
+        {
+            return $"{m_RemoteMainURL}/{fileName}";
         }
     }
 }
