@@ -8,6 +8,19 @@ public class Launcher : MonoBehaviour
 
     public EPlayMode playMode = EPlayMode.EditorSimulateMode;
 
+    /// <summary>
+    /// 不同平台资源更新地址
+    /// </summary>
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+    private const string m_ResUpdateURL = "http://192.168.31.104:9081/App/PC/v1.0/";
+#elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+    private const string m_ResUpdateURL = "http://192.168.31.104:9081/App/OSX/v1.0/";
+#elif UNITY_ANDROID
+    private const string m_ResUpdateURL = "http://192.168.31.104:9081/App/Android/v1.0/";
+#elif UNITY_IOS
+    private const string m_ResUpdateURL = "http://192.168.31.104:9081/App/IOS/v1.0/";
+#endif
+
     private void Awake()
     {
         YooAssets.Initialize();
@@ -23,7 +36,6 @@ public class Launcher : MonoBehaviour
         {
             StartCoroutine(InitPackageWithRemoteMode(OnAssetModuleInitSuccess));
         }
-        
     }
 
     /// <summary>
@@ -137,8 +149,8 @@ public class Launcher : MonoBehaviour
         {
             package = YooAssets.CreatePackage(kDefaulePackage);
         }
-        string remoteURL = "http://172.26.134.233:9081/App/v1.0/";
-        string fallbackURL = "http://172.26.134.233:9081/App/v1.0/";
+        string remoteURL = m_ResUpdateURL;
+        string fallbackURL = m_ResUpdateURL;
         IRemoteServices remoteServices = new RemoteServices(remoteURL, fallbackURL);
         HostPlayModeParameters initializeParamters = new HostPlayModeParameters();
         initializeParamters.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
@@ -177,7 +189,25 @@ public class Launcher : MonoBehaviour
             yield break;
         }
 
-        // var downloader = package.CreateResourceDownloader(10, 3);
+        var downloader = package.CreateResourceDownloader(10, 3);
+
+        int needDownloadCount = downloader.TotalDownloadCount;
+        long totalDownloadBytes = downloader.TotalDownloadBytes;
+        Debug.Log($"资源下载, needDownloadCount = {needDownloadCount}, totalDownloadBytes = {totalDownloadBytes}");
+        if (needDownloadCount > 0)
+        {
+            downloader.BeginDownload();
+            yield return downloader;
+            if (downloader.Status == EOperationStatus.Succeed)
+            {
+                Debug.Log($"资源下载成功");
+            }
+            else
+            {
+                Debug.LogError("资源下载失败");
+                yield break;
+            }
+        }
 
         YooAssets.SetDefaultPackage(package);
         onSuccessCallBack?.Invoke();
