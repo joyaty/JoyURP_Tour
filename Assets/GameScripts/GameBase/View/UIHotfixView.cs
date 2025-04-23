@@ -29,10 +29,5 @@ namespace Joy.Base.UI
         /// 进度提示信息
         /// </summary>
         [SerializeField] private TextMeshProUGUI m_Tips;
-
-        private void Start()
-        {
-            
-        }
     }
 }
