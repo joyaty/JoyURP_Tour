@@ -110,7 +110,7 @@ namespace UnityGameFramework.Runtime
             string value = null;
             if (!m_Settings.TryGetValue(settingName, out value))
             {
-                Log.Warning("Setting '{0}' is not exist.", settingName);
+                LogUtil.Warning("Setting '{0}' is not exist.", settingName);
                 return false;
             }
 
@@ -154,7 +154,7 @@ namespace UnityGameFramework.Runtime
             string value = null;
             if (!m_Settings.TryGetValue(settingName, out value))
             {
-                Log.Warning("Setting '{0}' is not exist.", settingName);
+                LogUtil.Warning("Setting '{0}' is not exist.", settingName);
                 return 0;
             }
 
@@ -198,7 +198,7 @@ namespace UnityGameFramework.Runtime
             string value = null;
             if (!m_Settings.TryGetValue(settingName, out value))
             {
-                Log.Warning("Setting '{0}' is not exist.", settingName);
+                LogUtil.Warning("Setting '{0}' is not exist.", settingName);
                 return 0f;
             }
 
@@ -242,7 +242,7 @@ namespace UnityGameFramework.Runtime
             string value = null;
             if (!m_Settings.TryGetValue(settingName, out value))
             {
-                Log.Warning("Setting '{0}' is not exist.", settingName);
+                LogUtil.Warning("Setting '{0}' is not exist.", settingName);
                 return null;
             }
 

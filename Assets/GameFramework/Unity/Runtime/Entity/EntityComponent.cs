@@ -85,7 +85,7 @@ namespace UnityGameFramework.Runtime
             m_EntityManager = GameFrameworkEntry.GetModule<IEntityManager>();
             if (m_EntityManager == null)
             {
-                Log.Fatal("Entity manager is invalid.");
+                LogUtil.Fatal("Entity manager is invalid.");
                 return;
             }
 
@@ -110,14 +110,14 @@ namespace UnityGameFramework.Runtime
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
-                Log.Fatal("Base component is invalid.");
+                LogUtil.Fatal("Base component is invalid.");
                 return;
             }
 
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace UnityGameFramework.Runtime
             EntityHelperBase entityHelper = Helper.CreateHelper(m_EntityHelperTypeName, m_CustomEntityHelper);
             if (entityHelper == null)
             {
-                Log.Error("Can not create entity helper.");
+                LogUtil.Error("Can not create entity helper.");
                 return;
             }
 
@@ -157,7 +157,7 @@ namespace UnityGameFramework.Runtime
             {
                 if (!AddEntityGroup(m_EntityGroups[i].Name, m_EntityGroups[i].InstanceAutoReleaseInterval, m_EntityGroups[i].InstanceCapacity, m_EntityGroups[i].InstanceExpireTime, m_EntityGroups[i].InstancePriority))
                 {
-                    Log.Warning("Add entity group '{0}' failure.", m_EntityGroups[i].Name);
+                    LogUtil.Warning("Add entity group '{0}' failure.", m_EntityGroups[i].Name);
                     continue;
                 }
             }
@@ -220,7 +220,7 @@ namespace UnityGameFramework.Runtime
             EntityGroupHelperBase entityGroupHelper = Helper.CreateHelper(m_EntityGroupHelperTypeName, m_CustomEntityGroupHelper, EntityGroupCount);
             if (entityGroupHelper == null)
             {
-                Log.Error("Can not create entity group helper.");
+                LogUtil.Error("Can not create entity group helper.");
                 return false;
             }
 
@@ -298,7 +298,7 @@ namespace UnityGameFramework.Runtime
         {
             if (results == null)
             {
-                Log.Error("Results is invalid.");
+                LogUtil.Error("Results is invalid.");
                 return;
             }
 
@@ -334,7 +334,7 @@ namespace UnityGameFramework.Runtime
         {
             if (results == null)
             {
-                Log.Error("Results is invalid.");
+                LogUtil.Error("Results is invalid.");
                 return;
             }
 
@@ -487,7 +487,7 @@ namespace UnityGameFramework.Runtime
         {
             if (entityLogicType == null)
             {
-                Log.Error("Entity type is invalid.");
+                LogUtil.Error("Entity type is invalid.");
                 return;
             }
 
@@ -633,7 +633,7 @@ namespace UnityGameFramework.Runtime
         {
             if (results == null)
             {
-                Log.Error("Results is invalid.");
+                LogUtil.Error("Results is invalid.");
                 return;
             }
 
@@ -671,7 +671,7 @@ namespace UnityGameFramework.Runtime
         {
             if (results == null)
             {
-                Log.Error("Results is invalid.");
+                LogUtil.Error("Results is invalid.");
                 return;
             }
 
@@ -902,13 +902,13 @@ namespace UnityGameFramework.Runtime
         {
             if (childEntity == null)
             {
-                Log.Warning("Child entity is invalid.");
+                LogUtil.Warning("Child entity is invalid.");
                 return;
             }
 
             if (parentEntity == null)
             {
-                Log.Warning("Parent entity is invalid.");
+                LogUtil.Warning("Parent entity is invalid.");
                 return;
             }
 
@@ -922,7 +922,7 @@ namespace UnityGameFramework.Runtime
                 parentTransform = parentEntity.Logic.CachedTransform.Find(parentTransformPath);
                 if (parentTransform == null)
                 {
-                    Log.Warning("Can not find transform path '{0}' from parent entity '{1}'.", parentTransformPath, parentEntity.Logic.Name);
+                    LogUtil.Warning("Can not find transform path '{0}' from parent entity '{1}'.", parentTransformPath, parentEntity.Logic.Name);
                     parentTransform = parentEntity.Logic.CachedTransform;
                 }
             }
@@ -977,13 +977,13 @@ namespace UnityGameFramework.Runtime
         {
             if (childEntity == null)
             {
-                Log.Warning("Child entity is invalid.");
+                LogUtil.Warning("Child entity is invalid.");
                 return;
             }
 
             if (parentEntity == null)
             {
-                Log.Warning("Parent entity is invalid.");
+                LogUtil.Warning("Parent entity is invalid.");
                 return;
             }
 
@@ -1080,14 +1080,14 @@ namespace UnityGameFramework.Runtime
         {
             if (entity == null)
             {
-                Log.Warning("Entity is invalid.");
+                LogUtil.Warning("Entity is invalid.");
                 return;
             }
 
             IEntityGroup entityGroup = entity.EntityGroup;
             if (entityGroup == null)
             {
-                Log.Warning("Entity group is invalid.");
+                LogUtil.Warning("Entity group is invalid.");
                 return;
             }
 
@@ -1103,14 +1103,14 @@ namespace UnityGameFramework.Runtime
         {
             if (entity == null)
             {
-                Log.Warning("Entity is invalid.");
+                LogUtil.Warning("Entity is invalid.");
                 return;
             }
 
             IEntityGroup entityGroup = entity.EntityGroup;
             if (entityGroup == null)
             {
-                Log.Warning("Entity group is invalid.");
+                LogUtil.Warning("Entity group is invalid.");
                 return;
             }
 
@@ -1124,7 +1124,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnShowEntityFailure(object sender, GameFramework.Entity.ShowEntityFailureEventArgs e)
         {
-            Log.Warning("Show entity failure, entity id '{0}', asset name '{1}', entity group name '{2}', error message '{3}'.", e.EntityId, e.EntityAssetName, e.EntityGroupName, e.ErrorMessage);
+            LogUtil.Warning("Show entity failure, entity id '{0}', asset name '{1}', entity group name '{2}', error message '{3}'.", e.EntityId, e.EntityAssetName, e.EntityGroupName, e.ErrorMessage);
             m_EventComponent.Fire(this, ShowEntityFailureEventArgs.Create(e));
         }
 

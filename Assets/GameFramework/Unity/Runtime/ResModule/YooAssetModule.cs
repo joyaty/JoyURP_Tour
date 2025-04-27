@@ -107,7 +107,7 @@ namespace GameFramework.Resource
         {
             if (remoteResURLs == null || remoteResURLs.Length <= 0)
             {
-                Log.Error("Remote res url must not be empty when using HostMode！");
+                LogUtil.Error("Remote res url must not be empty when using HostMode！");
                 return;
             }
             // 构造远程服务Service
@@ -132,7 +132,7 @@ namespace GameFramework.Resource
         /// </summary>
         private void InitializationWithWebMode(ResourcePackage package)
         {
-            Log.Fatal("InitializationWithWebMode, UnDefined!");
+            LogUtil.Fatal("InitializationWithWebMode, UnDefined!");
         }
 
         #region 异步回调函数

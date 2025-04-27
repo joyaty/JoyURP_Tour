@@ -67,7 +67,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_WebRequestAgentHelperCompleteEventHandler == null || m_WebRequestAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Web request agent helper handler is invalid.");
+                LogUtil.Fatal("Web request agent helper handler is invalid.");
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_WebRequestAgentHelperCompleteEventHandler == null || m_WebRequestAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Web request agent helper handler is invalid.");
+                LogUtil.Fatal("Web request agent helper handler is invalid.");
                 return;
             }
 

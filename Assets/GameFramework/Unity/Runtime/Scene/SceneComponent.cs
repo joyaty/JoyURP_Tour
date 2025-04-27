@@ -57,7 +57,7 @@ namespace UnityGameFramework.Runtime
             m_SceneManager = GameFrameworkEntry.GetModule<ISceneManager>();
             if (m_SceneManager == null)
             {
-                Log.Fatal("Scene manager is invalid.");
+                LogUtil.Fatal("Scene manager is invalid.");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace UnityGameFramework.Runtime
             m_GameFrameworkScene = SceneManager.GetSceneAt(GameEntry.GameFrameworkSceneId);
             if (!m_GameFrameworkScene.IsValid())
             {
-                Log.Fatal("Game Framework scene is invalid.");
+                LogUtil.Fatal("Game Framework scene is invalid.");
                 return;
             }
         }
@@ -90,14 +90,14 @@ namespace UnityGameFramework.Runtime
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
-                Log.Fatal("Base component is invalid.");
+                LogUtil.Fatal("Base component is invalid.");
                 return;
             }
 
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -120,14 +120,14 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(sceneAssetName))
             {
-                Log.Error("Scene asset name is invalid.");
+                LogUtil.Error("Scene asset name is invalid.");
                 return null;
             }
 
             int sceneNamePosition = sceneAssetName.LastIndexOf('/');
             if (sceneNamePosition + 1 >= sceneAssetName.Length)
             {
-                Log.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
+                LogUtil.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
                 return null;
             }
 
@@ -234,13 +234,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(sceneAssetName))
             {
-                Log.Error("Scene asset name is invalid.");
+                LogUtil.Error("Scene asset name is invalid.");
                 return false;
             }
 
             if (!sceneAssetName.StartsWith("Assets/", StringComparison.Ordinal) || !sceneAssetName.EndsWith(".unity", StringComparison.Ordinal))
             {
-                Log.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
+                LogUtil.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
                 return false;
             }
 
@@ -286,13 +286,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(sceneAssetName))
             {
-                Log.Error("Scene asset name is invalid.");
+                LogUtil.Error("Scene asset name is invalid.");
                 return;
             }
 
             if (!sceneAssetName.StartsWith("Assets/", StringComparison.Ordinal) || !sceneAssetName.EndsWith(".unity", StringComparison.Ordinal))
             {
-                Log.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
+                LogUtil.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
                 return;
             }
 
@@ -317,13 +317,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(sceneAssetName))
             {
-                Log.Error("Scene asset name is invalid.");
+                LogUtil.Error("Scene asset name is invalid.");
                 return;
             }
 
             if (!sceneAssetName.StartsWith("Assets/", StringComparison.Ordinal) || !sceneAssetName.EndsWith(".unity", StringComparison.Ordinal))
             {
-                Log.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
+                LogUtil.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
                 return;
             }
 
@@ -340,13 +340,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(sceneAssetName))
             {
-                Log.Error("Scene asset name is invalid.");
+                LogUtil.Error("Scene asset name is invalid.");
                 return;
             }
 
             if (!sceneAssetName.StartsWith("Assets/", StringComparison.Ordinal) || !sceneAssetName.EndsWith(".unity", StringComparison.Ordinal))
             {
-                Log.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
+                LogUtil.Error("Scene asset name '{0}' is invalid.", sceneAssetName);
                 return;
             }
 
@@ -363,7 +363,7 @@ namespace UnityGameFramework.Runtime
                 return;
             }
 
-            Log.Error("Scene '{0}' is not loaded or loading.", sceneAssetName);
+            LogUtil.Error("Scene '{0}' is not loaded or loading.", sceneAssetName);
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace UnityGameFramework.Runtime
                 Scene scene = SceneManager.GetSceneByName(GetSceneName(maxSceneName));
                 if (!scene.IsValid())
                 {
-                    Log.Error("Active scene '{0}' is invalid.", maxSceneName);
+                    LogUtil.Error("Active scene '{0}' is invalid.", maxSceneName);
                     return;
                 }
 
@@ -447,7 +447,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnLoadSceneFailure(object sender, GameFramework.Scene.LoadSceneFailureEventArgs e)
         {
-            Log.Warning("Load scene failure, scene asset name '{0}', error message '{1}'.", e.SceneAssetName, e.ErrorMessage);
+            LogUtil.Warning("Load scene failure, scene asset name '{0}', error message '{1}'.", e.SceneAssetName, e.ErrorMessage);
             m_EventComponent.Fire(this, LoadSceneFailureEventArgs.Create(e));
         }
 
@@ -470,7 +470,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnUnloadSceneFailure(object sender, GameFramework.Scene.UnloadSceneFailureEventArgs e)
         {
-            Log.Warning("Unload scene failure, scene asset name '{0}'.", e.SceneAssetName);
+            LogUtil.Warning("Unload scene failure, scene asset name '{0}'.", e.SceneAssetName);
             m_EventComponent.Fire(this, UnloadSceneFailureEventArgs.Create(e));
         }
     }

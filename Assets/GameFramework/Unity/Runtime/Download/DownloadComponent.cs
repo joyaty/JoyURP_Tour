@@ -153,7 +153,7 @@ namespace UnityGameFramework.Runtime
             m_DownloadManager = GameFrameworkEntry.GetModule<IDownloadManager>();
             if (m_DownloadManager == null)
             {
-                Log.Fatal("Download manager is invalid.");
+                LogUtil.Fatal("Download manager is invalid.");
                 return;
             }
 
@@ -170,7 +170,7 @@ namespace UnityGameFramework.Runtime
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -373,7 +373,7 @@ namespace UnityGameFramework.Runtime
             DownloadAgentHelperBase downloadAgentHelper = Helper.CreateHelper(m_DownloadAgentHelperTypeName, m_CustomDownloadAgentHelper, index);
             if (downloadAgentHelper == null)
             {
-                Log.Error("Can not create download agent helper.");
+                LogUtil.Error("Can not create download agent helper.");
                 return;
             }
 
@@ -402,7 +402,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnDownloadFailure(object sender, GameFramework.Download.DownloadFailureEventArgs e)
         {
-            Log.Warning("Download failure, download serial id '{0}', download path '{1}', download uri '{2}', error message '{3}'.", e.SerialId, e.DownloadPath, e.DownloadUri, e.ErrorMessage);
+            LogUtil.Warning("Download failure, download serial id '{0}', download path '{1}', download uri '{2}', error message '{3}'.", e.SerialId, e.DownloadPath, e.DownloadUri, e.ErrorMessage);
             m_EventComponent.Fire(this, DownloadFailureEventArgs.Create(e));
         }
     }

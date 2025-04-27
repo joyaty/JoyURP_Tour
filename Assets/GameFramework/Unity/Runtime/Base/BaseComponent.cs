@@ -189,9 +189,9 @@ namespace UnityGameFramework.Runtime
             InitTextHelper();
             InitVersionHelper();
             InitLogHelper();
-            Log.Info("Game Framework Version: {0}", GameFramework.Version.GameFrameworkVersion);
-            Log.Info("Game Version: {0} ({1})", GameFramework.Version.GameVersion, GameFramework.Version.InternalGameVersion);
-            Log.Info("Unity Version: {0}", Application.unityVersion);
+            LogUtil.Info("Game Framework Version: {0}", GameFramework.Version.GameFrameworkVersion);
+            LogUtil.Info("Game Version: {0} ({1})", GameFramework.Version.GameVersion, GameFramework.Version.InternalGameVersion);
+            LogUtil.Info("Unity Version: {0}", Application.unityVersion);
 
 #if UNITY_5_3_OR_NEWER || UNITY_5_3
             InitCompressionHelper();
@@ -206,7 +206,7 @@ namespace UnityGameFramework.Runtime
             m_EditorResourceMode &= Application.isEditor;
             if (m_EditorResourceMode)
             {
-                Log.Info("During this run, Game Framework will use editor resource files, which you should validate first.");
+                LogUtil.Info("During this run, Game Framework will use editor resource files, which you should validate first.");
             }
 
             Application.targetFrameRate = m_FrameRate;
@@ -299,14 +299,14 @@ namespace UnityGameFramework.Runtime
             Type textHelperType = Utility.Assembly.GetType(m_TextHelperTypeName);
             if (textHelperType == null)
             {
-                Log.Error("Can not find text helper type '{0}'.", m_TextHelperTypeName);
+                LogUtil.Error("Can not find text helper type '{0}'.", m_TextHelperTypeName);
                 return;
             }
 
             Utility.Text.ITextHelper textHelper = (Utility.Text.ITextHelper)Activator.CreateInstance(textHelperType);
             if (textHelper == null)
             {
-                Log.Error("Can not create text helper instance '{0}'.", m_TextHelperTypeName);
+                LogUtil.Error("Can not create text helper instance '{0}'.", m_TextHelperTypeName);
                 return;
             }
 
@@ -367,14 +367,14 @@ namespace UnityGameFramework.Runtime
             Type compressionHelperType = Utility.Assembly.GetType(m_CompressionHelperTypeName);
             if (compressionHelperType == null)
             {
-                Log.Error("Can not find compression helper type '{0}'.", m_CompressionHelperTypeName);
+                LogUtil.Error("Can not find compression helper type '{0}'.", m_CompressionHelperTypeName);
                 return;
             }
 
             Utility.Compression.ICompressionHelper compressionHelper = (Utility.Compression.ICompressionHelper)Activator.CreateInstance(compressionHelperType);
             if (compressionHelper == null)
             {
-                Log.Error("Can not create compression helper instance '{0}'.", m_CompressionHelperTypeName);
+                LogUtil.Error("Can not create compression helper instance '{0}'.", m_CompressionHelperTypeName);
                 return;
             }
 
@@ -391,14 +391,14 @@ namespace UnityGameFramework.Runtime
             Type jsonHelperType = Utility.Assembly.GetType(m_JsonHelperTypeName);
             if (jsonHelperType == null)
             {
-                Log.Error("Can not find JSON helper type '{0}'.", m_JsonHelperTypeName);
+                LogUtil.Error("Can not find JSON helper type '{0}'.", m_JsonHelperTypeName);
                 return;
             }
 
             Utility.Json.IJsonHelper jsonHelper = (Utility.Json.IJsonHelper)Activator.CreateInstance(jsonHelperType);
             if (jsonHelper == null)
             {
-                Log.Error("Can not create JSON helper instance '{0}'.", m_JsonHelperTypeName);
+                LogUtil.Error("Can not create JSON helper instance '{0}'.", m_JsonHelperTypeName);
                 return;
             }
 
@@ -407,7 +407,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnLowMemory()
         {
-            Log.Info("Low memory reported...");
+            LogUtil.Info("Low memory reported...");
 
             ObjectPoolComponent objectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
             if (objectPoolComponent != null)

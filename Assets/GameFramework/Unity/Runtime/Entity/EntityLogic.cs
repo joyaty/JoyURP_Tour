@@ -71,7 +71,7 @@ namespace UnityGameFramework.Runtime
             {
                 if (!m_Available)
                 {
-                    Log.Warning("Entity '{0}' is not available.", Name);
+                    LogUtil.Warning("Entity '{0}' is not available.", Name);
                     return;
                 }
 

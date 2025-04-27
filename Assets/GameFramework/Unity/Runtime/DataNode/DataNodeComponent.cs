@@ -41,7 +41,7 @@ namespace UnityGameFramework.Runtime
             m_DataNodeManager = GameFrameworkEntry.GetModule<IDataNodeManager>();
             if (m_DataNodeManager == null)
             {
-                Log.Fatal("Data node manager is invalid.");
+                LogUtil.Fatal("Data node manager is invalid.");
                 return;
             }
         }

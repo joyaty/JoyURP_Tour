@@ -48,14 +48,14 @@ namespace UnityGameFramework.Runtime
             m_FileSystemManager = GameFrameworkEntry.GetModule<IFileSystemManager>();
             if (m_FileSystemManager == null)
             {
-                Log.Fatal("File system manager is invalid.");
+                LogUtil.Fatal("File system manager is invalid.");
                 return;
             }
 
             FileSystemHelperBase fileSystemHelper = Helper.CreateHelper(m_FileSystemHelperTypeName, m_CustomFileSystemHelper);
             if (fileSystemHelper == null)
             {
-                Log.Error("Can not create fileSystem helper.");
+                LogUtil.Error("Can not create fileSystem helper.");
                 return;
             }
 

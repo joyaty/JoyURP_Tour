@@ -105,7 +105,7 @@ namespace UnityGameFramework.Runtime
                 }
             }
 
-            Log.Warning("Dictionary asset '{0}' is invalid.", dictionaryAssetName);
+            LogUtil.Warning("Dictionary asset '{0}' is invalid.", dictionaryAssetName);
             return false;
         }
 
@@ -154,7 +154,7 @@ namespace UnityGameFramework.Runtime
                     string[] splitedLine = dictionaryLineString.Split(ColumnSplitSeparator, StringSplitOptions.None);
                     if (splitedLine.Length != ColumnCount)
                     {
-                        Log.Warning("Can not parse dictionary line string '{0}' which column count is invalid.", dictionaryLineString);
+                        LogUtil.Warning("Can not parse dictionary line string '{0}' which column count is invalid.", dictionaryLineString);
                         return false;
                     }
 
@@ -162,7 +162,7 @@ namespace UnityGameFramework.Runtime
                     string dictionaryValue = splitedLine[3];
                     if (!localizationManager.AddRawString(dictionaryKey, dictionaryValue))
                     {
-                        Log.Warning("Can not add raw string with dictionary key '{0}' which may be invalid or duplicate.", dictionaryKey);
+                        LogUtil.Warning("Can not add raw string with dictionary key '{0}' which may be invalid or duplicate.", dictionaryKey);
                         return false;
                     }
                 }
@@ -171,7 +171,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
-                Log.Warning("Can not parse dictionary string with exception '{0}'.", exception);
+                LogUtil.Warning("Can not parse dictionary string with exception '{0}'.", exception);
                 return false;
             }
         }
@@ -199,7 +199,7 @@ namespace UnityGameFramework.Runtime
                             string dictionaryValue = binaryReader.ReadString();
                             if (!localizationManager.AddRawString(dictionaryKey, dictionaryValue))
                             {
-                                Log.Warning("Can not add raw string with dictionary key '{0}' which may be invalid or duplicate.", dictionaryKey);
+                                LogUtil.Warning("Can not add raw string with dictionary key '{0}' which may be invalid or duplicate.", dictionaryKey);
                                 return false;
                             }
                         }
@@ -210,7 +210,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
-                Log.Warning("Can not parse dictionary bytes with exception '{0}'.", exception);
+                LogUtil.Warning("Can not parse dictionary bytes with exception '{0}'.", exception);
                 return false;
             }
         }
@@ -230,7 +230,7 @@ namespace UnityGameFramework.Runtime
             m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
             if (m_ResourceComponent == null)
             {
-                Log.Fatal("Resource component is invalid.");
+                LogUtil.Fatal("Resource component is invalid.");
                 return;
             }
         }

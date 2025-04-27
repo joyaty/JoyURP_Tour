@@ -73,7 +73,7 @@ namespace UnityGameFramework.Runtime
             m_DataTableManager = GameFrameworkEntry.GetModule<IDataTableManager>();
             if (m_DataTableManager == null)
             {
-                Log.Fatal("Data table manager is invalid.");
+                LogUtil.Fatal("Data table manager is invalid.");
                 return;
             }
         }
@@ -83,14 +83,14 @@ namespace UnityGameFramework.Runtime
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
-                Log.Fatal("Base component is invalid.");
+                LogUtil.Fatal("Base component is invalid.");
                 return;
             }
 
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace UnityGameFramework.Runtime
             DataTableHelperBase dataTableHelper = Helper.CreateHelper(m_DataTableHelperTypeName, m_CustomDataTableHelper);
             if (dataTableHelper == null)
             {
-                Log.Error("Can not create data table helper.");
+                LogUtil.Error("Can not create data table helper.");
                 return;
             }
 
@@ -382,7 +382,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnReadDataFailure(object sender, ReadDataFailureEventArgs e)
         {
-            Log.Warning("Load data table failure, asset name '{0}', error message '{1}'.", e.DataAssetName, e.ErrorMessage);
+            LogUtil.Warning("Load data table failure, asset name '{0}', error message '{1}'.", e.DataAssetName, e.ErrorMessage);
             m_EventComponent.Fire(this, LoadDataTableFailureEventArgs.Create(e));
         }
 

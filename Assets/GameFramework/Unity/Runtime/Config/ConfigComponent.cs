@@ -71,7 +71,7 @@ namespace UnityGameFramework.Runtime
             m_ConfigManager = GameFrameworkEntry.GetModule<IConfigManager>();
             if (m_ConfigManager == null)
             {
-                Log.Fatal("Config manager is invalid.");
+                LogUtil.Fatal("Config manager is invalid.");
                 return;
             }
 
@@ -94,14 +94,14 @@ namespace UnityGameFramework.Runtime
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
-                Log.Fatal("Base component is invalid.");
+                LogUtil.Fatal("Base component is invalid.");
                 return;
             }
 
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace UnityGameFramework.Runtime
             ConfigHelperBase configHelper = Helper.CreateHelper(m_ConfigHelperTypeName, m_CustomConfigHelper);
             if (configHelper == null)
             {
-                Log.Error("Can not create config helper.");
+                LogUtil.Error("Can not create config helper.");
                 return;
             }
 
@@ -391,7 +391,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnReadDataFailure(object sender, ReadDataFailureEventArgs e)
         {
-            Log.Warning("Load config failure, asset name '{0}', error message '{1}'.", e.DataAssetName, e.ErrorMessage);
+            LogUtil.Warning("Load config failure, asset name '{0}', error message '{1}'.", e.DataAssetName, e.ErrorMessage);
             m_EventComponent.Fire(this, LoadConfigFailureEventArgs.Create(e));
         }
 

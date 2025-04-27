@@ -46,7 +46,7 @@ namespace UnityGameFramework.Runtime
                 }
             }
 
-            Log.Warning("Data table asset '{0}' is invalid.", dataTableAssetName);
+            LogUtil.Warning("Data table asset '{0}' is invalid.", dataTableAssetName);
             return false;
         }
 
@@ -94,7 +94,7 @@ namespace UnityGameFramework.Runtime
 
                     if (!dataTable.AddDataRow(dataRowString, userData))
                     {
-                        Log.Warning("Can not parse data row string '{0}'.", dataRowString);
+                        LogUtil.Warning("Can not parse data row string '{0}'.", dataRowString);
                         return false;
                     }
                 }
@@ -103,7 +103,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
-                Log.Warning("Can not parse data table string with exception '{0}'.", exception);
+                LogUtil.Warning("Can not parse data table string with exception '{0}'.", exception);
                 return false;
             }
         }
@@ -130,7 +130,7 @@ namespace UnityGameFramework.Runtime
                             int dataRowBytesLength = binaryReader.Read7BitEncodedInt32();
                             if (!dataTable.AddDataRow(dataTableBytes, (int)binaryReader.BaseStream.Position, dataRowBytesLength, userData))
                             {
-                                Log.Warning("Can not parse data row bytes.");
+                                LogUtil.Warning("Can not parse data row bytes.");
                                 return false;
                             }
 
@@ -143,7 +143,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
-                Log.Warning("Can not parse dictionary bytes with exception '{0}'.", exception);
+                LogUtil.Warning("Can not parse dictionary bytes with exception '{0}'.", exception);
                 return false;
             }
         }
@@ -163,7 +163,7 @@ namespace UnityGameFramework.Runtime
             m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
             if (m_ResourceComponent == null)
             {
-                Log.Fatal("Resource component is invalid.");
+                LogUtil.Fatal("Resource component is invalid.");
                 return;
             }
         }

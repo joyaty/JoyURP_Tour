@@ -22,7 +22,7 @@ namespace UnityGameFramework.Runtime
                 m_ObjectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
                 if (m_ObjectPoolComponent == null)
                 {
-                    Log.Fatal("Object pool component is invalid.");
+                    LogUtil.Fatal("Object pool component is invalid.");
                     return;
                 }
             }

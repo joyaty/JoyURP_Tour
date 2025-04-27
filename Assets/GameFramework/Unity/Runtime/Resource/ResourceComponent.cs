@@ -593,14 +593,14 @@ namespace UnityGameFramework.Runtime
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
-                Log.Fatal("Base component is invalid.");
+                LogUtil.Fatal("Base component is invalid.");
                 return;
             }
 
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
-                Log.Fatal("Event component is invalid.");
+                LogUtil.Fatal("Event component is invalid.");
                 return;
             }
 
@@ -608,7 +608,7 @@ namespace UnityGameFramework.Runtime
             m_ResourceManager = m_EditorResourceMode ? baseComponent.EditorResourceHelper : GameFrameworkEntry.GetModule<IResourceManager>();
             if (m_ResourceManager == null)
             {
-                Log.Fatal("Resource manager is invalid.");
+                LogUtil.Fatal("Resource manager is invalid.");
                 return;
             }
 
@@ -666,7 +666,7 @@ namespace UnityGameFramework.Runtime
             m_ResourceHelper = Helper.CreateHelper(m_ResourceHelperTypeName, m_CustomResourceHelper);
             if (m_ResourceHelper == null)
             {
-                Log.Error("Can not create resource helper.");
+                LogUtil.Error("Can not create resource helper.");
                 return;
             }
 
@@ -695,7 +695,7 @@ namespace UnityGameFramework.Runtime
             m_LastUnloadUnusedAssetsOperationElapseSeconds += Time.unscaledDeltaTime;
             if (m_AsyncOperation == null && (m_ForceUnloadUnusedAssets || m_LastUnloadUnusedAssetsOperationElapseSeconds >= m_MaxUnloadUnusedAssetsInterval || m_PreorderUnloadUnusedAssets && m_LastUnloadUnusedAssetsOperationElapseSeconds >= m_MinUnloadUnusedAssetsInterval))
             {
-                Log.Info("Unload unused assets...");
+                LogUtil.Info("Unload unused assets...");
                 m_ForceUnloadUnusedAssets = false;
                 m_PreorderUnloadUnusedAssets = false;
                 m_LastUnloadUnusedAssetsOperationElapseSeconds = 0f;
@@ -707,7 +707,7 @@ namespace UnityGameFramework.Runtime
                 m_AsyncOperation = null;
                 if (m_PerformGCCollect)
                 {
-                    Log.Info("GC.Collect...");
+                    LogUtil.Info("GC.Collect...");
                     m_PerformGCCollect = false;
                     GC.Collect();
                 }
@@ -1037,13 +1037,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(assetName))
             {
-                Log.Error("Asset name is invalid.");
+                LogUtil.Error("Asset name is invalid.");
                 return;
             }
 
             if (!assetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Asset name '{0}' is invalid.", assetName);
+                LogUtil.Error("Asset name '{0}' is invalid.", assetName);
                 return;
             }
 
@@ -1114,13 +1114,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(binaryAssetName))
             {
-                Log.Error("Binary asset name is invalid.");
+                LogUtil.Error("Binary asset name is invalid.");
                 return;
             }
 
             if (!binaryAssetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
+                LogUtil.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
                 return;
             }
 
@@ -1136,13 +1136,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(binaryAssetName))
             {
-                Log.Error("Binary asset name is invalid.");
+                LogUtil.Error("Binary asset name is invalid.");
                 return null;
             }
 
             if (!binaryAssetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
+                LogUtil.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
                 return null;
             }
 
@@ -1159,7 +1159,7 @@ namespace UnityGameFramework.Runtime
         {
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1177,7 +1177,7 @@ namespace UnityGameFramework.Runtime
         {
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1196,19 +1196,19 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(binaryAssetName))
             {
-                Log.Error("Binary asset name is invalid.");
+                LogUtil.Error("Binary asset name is invalid.");
                 return 0;
             }
 
             if (!binaryAssetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
+                LogUtil.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
                 return 0;
             }
 
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1237,13 +1237,13 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(binaryAssetName))
             {
-                Log.Error("Binary asset name is invalid.");
+                LogUtil.Error("Binary asset name is invalid.");
                 return null;
             }
 
             if (!binaryAssetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
+                LogUtil.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
                 return null;
             }
 
@@ -1260,7 +1260,7 @@ namespace UnityGameFramework.Runtime
         {
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1303,7 +1303,7 @@ namespace UnityGameFramework.Runtime
         {
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1336,19 +1336,19 @@ namespace UnityGameFramework.Runtime
         {
             if (string.IsNullOrEmpty(binaryAssetName))
             {
-                Log.Error("Binary asset name is invalid.");
+                LogUtil.Error("Binary asset name is invalid.");
                 return 0;
             }
 
             if (!binaryAssetName.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                Log.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
+                LogUtil.Error("Binary asset name '{0}' is invalid.", binaryAssetName);
                 return 0;
             }
 
             if (buffer == null)
             {
-                Log.Error("Buffer is invalid.");
+                LogUtil.Error("Buffer is invalid.");
                 return 0;
             }
 
@@ -1431,7 +1431,7 @@ namespace UnityGameFramework.Runtime
             LoadResourceAgentHelperBase loadResourceAgentHelper = Helper.CreateHelper(m_LoadResourceAgentHelperTypeName, m_CustomLoadResourceAgentHelper, index);
             if (loadResourceAgentHelper == null)
             {
-                Log.Error("Can not create load resource agent helper.");
+                LogUtil.Error("Can not create load resource agent helper.");
                 return;
             }
 

@@ -144,7 +144,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_LoadResourceAgentHelperReadFileCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 
@@ -162,7 +162,7 @@ namespace UnityGameFramework.Runtime
 #if UNITY_5_3_5 || UNITY_5_3_6 || UNITY_5_3_7 || UNITY_5_3_8 || UNITY_5_4_OR_NEWER
             if (m_LoadResourceAgentHelperReadFileCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_LoadResourceAgentHelperReadBytesCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 
@@ -209,7 +209,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_LoadResourceAgentHelperReadBytesCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 
@@ -227,7 +227,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_LoadResourceAgentHelperParseBytesCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 
@@ -245,7 +245,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_LoadResourceAgentHelperLoadCompleteEventHandler == null || m_LoadResourceAgentHelperUpdateEventHandler == null || m_LoadResourceAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Load resource agent helper handler is invalid.");
+                LogUtil.Fatal("Load resource agent helper handler is invalid.");
                 return;
             }
 

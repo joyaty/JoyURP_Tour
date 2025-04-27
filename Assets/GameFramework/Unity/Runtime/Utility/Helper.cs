@@ -43,13 +43,13 @@ namespace UnityGameFramework.Runtime
                 System.Type helperType = Utility.Assembly.GetType(helperTypeName);
                 if (helperType == null)
                 {
-                    Log.Warning("Can not find helper type '{0}'.", helperTypeName);
+                    LogUtil.Warning("Can not find helper type '{0}'.", helperTypeName);
                     return null;
                 }
 
                 if (!typeof(T).IsAssignableFrom(helperType))
                 {
-                    Log.Warning("Type '{0}' is not assignable from '{1}'.", typeof(T).FullName, helperType.FullName);
+                    LogUtil.Warning("Type '{0}' is not assignable from '{1}'.", typeof(T).FullName, helperType.FullName);
                     return null;
                 }
 
@@ -57,7 +57,7 @@ namespace UnityGameFramework.Runtime
             }
             else if (customHelper == null)
             {
-                Log.Warning("You must set custom helper with '{0}' type first.", typeof(T).FullName);
+                LogUtil.Warning("You must set custom helper with '{0}' type first.", typeof(T).FullName);
                 return null;
             }
             else if (customHelper.gameObject.InScene())

@@ -21,7 +21,7 @@ namespace UnityGameFramework.Runtime
             {
                 if (updateInterval <= 0f)
                 {
-                    Log.Error("Update interval is invalid.");
+                    LogUtil.Error("Update interval is invalid.");
                     return;
                 }
 
@@ -39,7 +39,7 @@ namespace UnityGameFramework.Runtime
                 {
                     if (value <= 0f)
                     {
-                        Log.Error("Update interval is invalid.");
+                        LogUtil.Error("Update interval is invalid.");
                         return;
                     }
 

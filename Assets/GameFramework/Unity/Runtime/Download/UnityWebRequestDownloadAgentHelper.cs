@@ -102,7 +102,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_DownloadAgentHelperUpdateBytesEventHandler == null || m_DownloadAgentHelperUpdateLengthEventHandler == null || m_DownloadAgentHelperCompleteEventHandler == null || m_DownloadAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Download agent helper handler is invalid.");
+                LogUtil.Fatal("Download agent helper handler is invalid.");
                 return;
             }
 
@@ -125,7 +125,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_DownloadAgentHelperUpdateBytesEventHandler == null || m_DownloadAgentHelperUpdateLengthEventHandler == null || m_DownloadAgentHelperCompleteEventHandler == null || m_DownloadAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Download agent helper handler is invalid.");
+                LogUtil.Fatal("Download agent helper handler is invalid.");
                 return;
             }
 
@@ -150,7 +150,7 @@ namespace UnityGameFramework.Runtime
         {
             if (m_DownloadAgentHelperUpdateBytesEventHandler == null || m_DownloadAgentHelperUpdateLengthEventHandler == null || m_DownloadAgentHelperCompleteEventHandler == null || m_DownloadAgentHelperErrorEventHandler == null)
             {
-                Log.Fatal("Download agent helper handler is invalid.");
+                LogUtil.Fatal("Download agent helper handler is invalid.");
                 return;
             }
 
