@@ -7,43 +7,34 @@ namespace GameFramework.Resource
     /// <summary>
     /// 基于YooAssets资源管理插件封装的资源管理模块实现
     /// </summary>
-    public sealed class YooAssetModule : IAssetModule
+    public sealed class AssetModule : IAssetModule
     {
         /// <summary>
         /// 资源管理模块是否初始化完成
         /// </summary>
-        private bool m_IsInitialized = false;
-        /// <summary>
-        /// 资源管理模块是否初始化完成
-        /// </summary>
-        public bool IsInitialized => m_IsInitialized;
+        public bool IsInitialized => YooAssets.Initialized;
 
-        /// <summary>
-        /// 资源是否需要更新
-        /// </summary>
-        private bool m_IsNeedUpdate = false;
+        public void Initialize(string defaultPackageName)
+        {
+            // 初始化YooAssets模块，
+            YooAssets.Initialize();
+            // 设置默认资源包
+            ResourcePackage package = YooAssets.TryGetPackage(defaultPackageName);
+            package ??= YooAssets.CreatePackage(defaultPackageName);
+            YooAssets.SetDefaultPackage(package);
+        }
 
-        /// <summary>
-        /// 是否需要更新资源
-        /// </summary>
-        public bool IsNeedUpdate => m_IsNeedUpdate;
-
-        public void Initialize(string defaultPackageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null)
+        public void InitializePackage(string packageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null)
         {
 #if !UNITY_EDITOR
             // 非编辑器下，禁止使用编辑器模式初始化资源模块
             if (workingMode == EnumResWorkingMode.EditorMode)
             {
-                Log.Error("非编辑器模式下, 禁止使用编辑器模式初始化资源模块, workingMode = {0}", workingMode);
+                LogUtil.Error("非编辑器模式下, 禁止使用编辑器模式初始化资源模块, workingMode = {0}", workingMode);
             }
 #endif
-            // 初始化YooAssets模块，并设置默认资源包
-            m_IsInitialized = false;
-            m_IsNeedUpdate = false;
-            YooAssets.Initialize();
-            ResourcePackage package = YooAssets.TryGetPackage(defaultPackageName);
-            package ??= YooAssets.CreatePackage(defaultPackageName);
-            YooAssets.SetDefaultPackage(package);
+            ResourcePackage package = YooAssets.TryGetPackage(packageName);
+            package ??= YooAssets.CreatePackage(packageName);
             // 初始化资源包
             switch (workingMode)
             {
@@ -62,6 +53,15 @@ namespace GameFramework.Resource
             }
         }
 
+        public void RequestVersion(string packageName)
+        {
+
+        }
+
+        public void UpdateManifest(string packageName, string versionCode)
+        {
+
+        }
 
         /// <summary>
         /// 编辑器模式初始化资源资源包
@@ -143,7 +143,7 @@ namespace GameFramework.Resource
         /// <param name="operation"></param>
         private void OnPackageInitializationCompleted(AsyncOperationBase operation)
         {
-            m_IsInitialized = true;
+
         }
 
         #endregion
