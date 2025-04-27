@@ -683,23 +683,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4694458781123294003, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
+      propertyPath: m_Value
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694458781123294003, guid: f8d005f5829ab98428d96c551a001f01,
+        type: 3}
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7731078500002162402, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7731078500002162402, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8685424870943223966, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_Name
       value: UI_HotfixPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685424870943223966, guid: f8d005f5829ab98428d96c551a001f01,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
