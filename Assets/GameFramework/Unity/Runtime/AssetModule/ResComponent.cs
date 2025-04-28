@@ -3,6 +3,8 @@ using UnityEngine;
 using GameFramework;
 using GameFramework.Resource;
 using UnityGameFramework.Runtime;
+using Cysharp.Threading.Tasks;
+using YooAsset;
 
 namespace UnityGameFramework
 {
@@ -21,7 +23,7 @@ namespace UnityGameFramework
         /// <summary>
         /// 默认资源包包名
         /// </summary>
-        [SerializeField] private string m_DefaultPackage;
+        [SerializeField] private string m_DefaultPackageName = "";
 
         /// <summary>
         /// 资源更新远程地址
@@ -45,6 +47,11 @@ namespace UnityGameFramework
         /// </summary>
         public bool IsInitialized => m_AssetModule != null && m_AssetModule.IsInitialized;
 
+        /// <summary>
+        /// 获取默认资源包名称
+        /// </summary>
+        public string DefaultPackageName => m_DefaultPackageName;
+
         private void Start()
         {
             if (IsInitialized)
@@ -53,7 +60,49 @@ namespace UnityGameFramework
             }
             // 创建资源管理实现模块，并且初始化
             m_AssetModule = GameFrameworkEntry.GetModule<IAssetModule>();
-            m_AssetModule.Initialize(m_DefaultPackage);
+            m_AssetModule.Initialize(m_DefaultPackageName);
+        }
+
+        /// <summary>
+        /// 初始化资源包
+        /// </summary>
+        /// <param name="packageName">资源包名</param>
+        /// <returns></returns>
+        public async UniTask<bool> InitializePackage(string packageName = "")
+        {
+            string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
+            string[] remoteURLs = null;
+            if (m_WorkingMode == EnumResWorkingMode.HostMode)
+            {
+                remoteURLs = new string[] { m_RemoteMainURL, m_RemoteFallbackURL };
+            }
+            InitializationOperation initializationOperation = await m_AssetModule.InitializePackage(name, m_WorkingMode, remoteURLs);
+            return initializationOperation.Status == EOperationStatus.Succeed;
+        }
+
+        /// <summary>
+        /// 请求(本地|远程)最新的资源版本号
+        /// </summary>
+        /// <param name="packageName">资源包名</param>
+        /// <returns></returns>
+        public async UniTask<(bool, string)> RequestPackageVersion(string packageName = "")
+        {
+            string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
+            RequestPackageVersionOperation requestPackageVersionOperation = await m_AssetModule.RequestPackageVersion(name);
+            return (requestPackageVersionOperation.Status == EOperationStatus.Succeed, requestPackageVersionOperation.PackageVersion);
+        }
+
+        /// <summary>
+        /// 更新资源列表文件
+        /// </summary>
+        /// <param name="resVersionCode">资源版本号</param>
+        /// <param name="packageName">资源包名</param>
+        /// <returns></returns>
+        public async UniTask<bool> UpdatePackageManifest(string resVersionCode, string packageName = "")
+        {
+            string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
+            UpdatePackageManifestOperation updatePackageManifestOperation = await m_AssetModule.UpdatePackageManifest(resVersionCode, name);
+            return updatePackageManifestOperation.Status == EOperationStatus.Succeed;
         }
     }
 }

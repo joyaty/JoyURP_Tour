@@ -1,8 +1,9 @@
 
+using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
+using UnityGameFramework;
 using UnityGameFramework.Runtime;
-using YooAsset;
 
 namespace Joy.Base.Procedure
 {
@@ -16,22 +17,42 @@ namespace Joy.Base.Procedure
         /// </summary>
         public const string RES_MANAGER_INIT_MODE = "RES_MANAGER_INIT_MODE";
 
-
+        /// <summary>
+        /// 资源管理模块对外组件
+        /// </summary>
+        private ResComponent m_ResComponent;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
-            VarInt32 initType = procedureOwner.GetData<VarInt32>(RES_MANAGER_INIT_MODE);
+            m_ResComponent = GameEntry.GetComponent<ResComponent>();
+            InitializePackage(procedureOwner).Forget();
+        }
 
-            YooAssets.Initialize();
-            ResourcePackage package = YooAssets.TryGetPackage("DefaultPackage");
-            if (package == null)
+        protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
+        {
+            m_ResComponent = null;
+        }
+
+        /// <summary>
+        /// 初始化资源包
+        /// </summary>
+        /// <param name="procedureOwner"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        private async UniTaskVoid InitializePackage(IFsm<IProcedureManager> procedureOwner)
+        {
+            bool isSuccess = await m_ResComponent.InitializePackage(m_ResComponent.DefaultPackageName);
+            if (isSuccess)
             {
-                package = YooAssets.CreatePackage("DefaultPackage");
+                LogUtil.Debug("初始化资源包成功，PackageName = {0}", m_ResComponent.DefaultPackageName);
+                // 切换到资源版本号校验节点
+                ChangeState<ProcedureRequestVersion>(procedureOwner);
             }
-
-            YooAssets.SetDefaultPackage(package);
-
-            
+            else
+            {
+                LogUtil.Error("初始化资源包失败，PackageName = {0}", m_ResComponent.DefaultPackageName);
+                // TODO 弹窗重试或者退出
+            }
         }
     }
 }

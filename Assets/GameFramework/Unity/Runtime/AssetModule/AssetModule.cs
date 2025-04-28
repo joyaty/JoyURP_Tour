@@ -1,4 +1,6 @@
 
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityGameFramework.Runtime;
 using YooAsset;
 
@@ -14,17 +16,23 @@ namespace GameFramework.Resource
         /// </summary>
         public bool IsInitialized => YooAssets.Initialized;
 
+        /// <summary>
+        /// 默认资源包名
+        /// </summary>
+        private string m_DefaultPackageName = "";
+
         public void Initialize(string defaultPackageName)
         {
             // 初始化YooAssets模块，
             YooAssets.Initialize();
             // 设置默认资源包
+            m_DefaultPackageName = defaultPackageName;
             ResourcePackage package = YooAssets.TryGetPackage(defaultPackageName);
             package ??= YooAssets.CreatePackage(defaultPackageName);
             YooAssets.SetDefaultPackage(package);
         }
 
-        public void InitializePackage(string packageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null)
+        public async UniTask<InitializationOperation> InitializePackage(string packageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null)
         {
 #if !UNITY_EDITOR
             // 非编辑器下，禁止使用编辑器模式初始化资源模块
@@ -36,37 +44,66 @@ namespace GameFramework.Resource
             ResourcePackage package = YooAssets.TryGetPackage(packageName);
             package ??= YooAssets.CreatePackage(packageName);
             // 初始化资源包
-            switch (workingMode)
+            return workingMode switch
+            { 
+                EnumResWorkingMode.EditorMode => await InitializationWithEditorMode(package),
+                EnumResWorkingMode.LocalMode => await InitializationWithLocalMode(package, resDecryption),
+                EnumResWorkingMode.HostMode => await InitializationWithHostMode(package, remoteResURLs, resDecryption),
+                EnumResWorkingMode.WebMode => await InitializationWithWebMode(package),
+                _ => null,
+            };
+        }
+
+        public async UniTask<RequestPackageVersionOperation> RequestPackageVersion(string packageName)
+        {
+            // 获取资源包
+            string name = string.IsNullOrEmpty(packageName) ? m_DefaultPackageName : packageName;
+            ResourcePackage package = YooAssets.GetPackage(name);
+            if (package == null)
             {
-                case EnumResWorkingMode.EditorMode:
-                    InitializationWithEditorMode(package);
-                    break;
-                case EnumResWorkingMode.LocalMode:
-                    InitializationWithLocalMode(package, resDecryption);
-                    break;
-                case EnumResWorkingMode.HostMode:
-                    InitializationWithHostMode(package, remoteResURLs, resDecryption);
-                    break;
-                case EnumResWorkingMode.WebMode:
-                    InitializationWithWebMode(package);
-                    break;
+                LogUtil.Error("资源包【{0}】不存在，请先通过InitializePackage初始化资源包", name);
+                return null;
             }
+            // 更新获取(内置|远程)的资源版本号
+            RequestPackageVersionOperation requestPackageVersionOperation = package.RequestPackageVersionAsync();
+            await requestPackageVersionOperation.ToUniTask();
+            return requestPackageVersionOperation;
         }
 
-        public void RequestVersion(string packageName)
+        public async UniTask<UpdatePackageManifestOperation> UpdatePackageManifest(string versionCode, string packageName = "")
         {
-
+            // 获取资源包
+            string name = string.IsNullOrEmpty(packageName) ? m_DefaultPackageName : packageName;
+            ResourcePackage package = YooAssets.GetPackage(name);
+            if (package == null)
+            {
+                LogUtil.Error("资源包【{0}】不存在，请先通过InitializePackage初始化资源包", name);
+                return null;
+            }
+            // 更新资源包的资源清单文件，并且加载
+            UpdatePackageManifestOperation updatePackageManifestOperation = package.UpdatePackageManifestAsync(versionCode);
+            await updatePackageManifestOperation.ToUniTask();
+            return updatePackageManifestOperation;
         }
 
-        public void UpdateManifest(string packageName, string versionCode)
+        public ResourcePackage GetPackage(string packageName = "")
         {
-
+            string name = string.IsNullOrEmpty(packageName) ? m_DefaultPackageName : packageName;
+            ResourcePackage package = YooAssets.GetPackage(name);
+            if (package == null)
+            {
+                LogUtil.Error("资源包【{0}】不存在，请先通过InitializePackage初始化资源包", name);
+                return null;
+            }
+            return package;
         }
 
         /// <summary>
         /// 编辑器模式初始化资源资源包
         /// </summary>
-        private void InitializationWithEditorMode(ResourcePackage package)
+        /// <param name="package"></param>
+        /// <returns></returns>
+        private async UniTask<InitializationOperation> InitializationWithEditorMode(ResourcePackage package)
         {
             // 编辑器模拟构建资源包
             PackageInvokeBuildResult packageRoot = EditorSimulateModeHelper.SimulateBuild(package.PackageName);
@@ -77,7 +114,8 @@ namespace GameFramework.Resource
             parameters.EditorFileSystemParameters = fileSystemParameters; // 文件系统初始化参数传递
             // 初始化资源包
             InitializationOperation initializationOperation = package.InitializeAsync(parameters);
-            initializationOperation.Completed += OnPackageInitializationCompleted;
+            await initializationOperation.ToUniTask();
+            return initializationOperation;
         }
 
         /// <summary>
@@ -85,7 +123,7 @@ namespace GameFramework.Resource
         /// </summary>
         /// <param name="package"></param>
         /// <param name="decryptionService"></param>
-        private void InitializationWithLocalMode(ResourcePackage package, IResDecryptionService decryptionService)
+        private async UniTask<InitializationOperation> InitializationWithLocalMode(ResourcePackage package, IResDecryptionService decryptionService)
         {
             // YooAsset默认路径下构建文件系统参数(项目路径/Assets/StreamingAssets)
             FileSystemParameters fileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(decryptionService);
@@ -94,7 +132,8 @@ namespace GameFramework.Resource
             parameters.BuildinFileSystemParameters = fileSystemParameters; // 文件系统初始化参数传递
             // 初始化资源包
             InitializationOperation initializationOperation = package.InitializeAsync(parameters);
-            initializationOperation.Completed += OnPackageInitializationCompleted;
+            await initializationOperation.ToUniTask();
+            return initializationOperation;
         }
 
         /// <summary>
@@ -103,12 +142,12 @@ namespace GameFramework.Resource
         /// <param name="package"></param>
         /// <param name="remoteResURLs"></param>
         /// <param name="decryptionService"></param>
-        private void InitializationWithHostMode(ResourcePackage package, string[] remoteResURLs, IResDecryptionService decryptionService)
+        private async UniTask<InitializationOperation> InitializationWithHostMode(ResourcePackage package, string[] remoteResURLs, IResDecryptionService decryptionService)
         {
             if (remoteResURLs == null || remoteResURLs.Length <= 0)
             {
                 LogUtil.Error("Remote res url must not be empty when using HostMode！");
-                return;
+                return null;
             }
             // 构造远程服务Service
             string mainURL = remoteResURLs[0];
@@ -124,28 +163,17 @@ namespace GameFramework.Resource
             parameters.CacheFileSystemParameters = cacheParamters;
             // 初始化资源包
             InitializationOperation initializationOperation = package.InitializeAsync(parameters);
-            initializationOperation.Completed += OnPackageInitializationCompleted;
+            await initializationOperation.ToUniTask();
+            return initializationOperation;
         }
 
         /// <summary>
         /// 小游戏模式
         /// </summary>
-        private void InitializationWithWebMode(ResourcePackage package)
+        private async UniTask<InitializationOperation> InitializationWithWebMode(ResourcePackage package)
         {
             LogUtil.Fatal("InitializationWithWebMode, UnDefined!");
+            return null;
         }
-
-        #region 异步回调函数
-
-        /// <summary>
-        /// 包初始化结束回调
-        /// </summary>
-        /// <param name="operation"></param>
-        private void OnPackageInitializationCompleted(AsyncOperationBase operation)
-        {
-
-        }
-
-        #endregion
     }
 }
