@@ -52,6 +52,11 @@ namespace UnityGameFramework
         /// </summary>
         public string DefaultPackageName => m_DefaultPackageName;
 
+        /// <summary>
+        /// 资源包工作模式
+        /// </summary>
+        public EnumResWorkingMode WorkingMode => m_WorkingMode;
+
         private void Start()
         {
             if (IsInitialized)
