@@ -63,7 +63,7 @@ namespace GameFramework.Resource
             };
         }
 
-        public async UniTask<RequestPackageVersionOperation> RequestPackageVersion(string packageName)
+        public async UniTask<RequestPackageVersionOperation> RequestPackageVersion(string packageName = "")
         {
             // 获取资源包
             string name = string.IsNullOrEmpty(packageName) ? m_DefaultPackageName : packageName;
