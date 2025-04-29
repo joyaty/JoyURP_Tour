@@ -18,7 +18,7 @@ namespace UnityGameFramework.Runtime
         private sealed class EnvironmentInformationWindow : ScrollableDebuggerWindowBase
         {
             private BaseComponent m_BaseComponent = null;
-            private ResourceComponent m_ResourceComponent = null;
+            // private ResourceComponent m_ResourceComponent = null;
 
             public override void Initialize(params object[] args)
             {
@@ -29,12 +29,12 @@ namespace UnityGameFramework.Runtime
                     return;
                 }
 
-                m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
-                if (m_ResourceComponent == null)
-                {
-                    LogUtil.Fatal("Resource component is invalid.");
-                    return;
-                }
+                // m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
+                // if (m_ResourceComponent == null)
+                // {
+                //     LogUtil.Fatal("Resource component is invalid.");
+                //     return;
+                // }
             }
 
             protected override void OnDrawScrollableWindow()
@@ -51,7 +51,7 @@ namespace UnityGameFramework.Runtime
 #endif
                     DrawItem("Game Framework Version", Version.GameFrameworkVersion);
                     DrawItem("Game Version", Utility.Text.Format("{0} ({1})", Version.GameVersion, Version.InternalGameVersion));
-                    DrawItem("Resource Version", m_BaseComponent.EditorResourceMode ? "Unavailable in editor resource mode" : (string.IsNullOrEmpty(m_ResourceComponent.ApplicableGameVersion) ? "Unknown" : Utility.Text.Format("{0} ({1})", m_ResourceComponent.ApplicableGameVersion, m_ResourceComponent.InternalResourceVersion)));
+                    // DrawItem("Resource Version", m_BaseComponent.EditorResourceMode ? "Unavailable in editor resource mode" : (string.IsNullOrEmpty(m_ResourceComponent.ApplicableGameVersion) ? "Unknown" : Utility.Text.Format("{0} ({1})", m_ResourceComponent.ApplicableGameVersion, m_ResourceComponent.InternalResourceVersion)));
                     DrawItem("Application Version", Application.version);
                     DrawItem("Unity Version", Application.unityVersion);
                     DrawItem("Platform", Application.platform.ToString());

@@ -23,7 +23,7 @@ namespace UnityGameFramework.Runtime
         private static readonly string BytesAssetExtension = ".bytes";
         private const int ColumnCount = 4;
 
-        private ResourceComponent m_ResourceComponent = null;
+        // private ResourceComponent m_ResourceComponent = null;
 
         /// <summary>
         /// 读取全局配置。
@@ -165,17 +165,18 @@ namespace UnityGameFramework.Runtime
         /// <param name="configAsset">要释放的全局配置资源。</param>
         public override void ReleaseDataAsset(IConfigManager configManager, object configAsset)
         {
-            m_ResourceComponent.UnloadAsset(configAsset);
+            // TODO 释放配置资源
+            // m_ResourceComponent.UnloadAsset(configAsset);
         }
 
         private void Start()
         {
-            m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
-            if (m_ResourceComponent == null)
-            {
-                LogUtil.Fatal("Resource component is invalid.");
-                return;
-            }
+            // m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
+            // if (m_ResourceComponent == null)
+            // {
+            //     LogUtil.Fatal("Resource component is invalid.");
+            //     return;
+            // }
         }
     }
 }

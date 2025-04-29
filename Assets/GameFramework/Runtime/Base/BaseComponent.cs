@@ -415,10 +415,16 @@ namespace UnityGameFramework.Runtime
                 objectPoolComponent.ReleaseAllUnused();
             }
 
-            ResourceComponent resourceCompoent = GameEntry.GetComponent<ResourceComponent>();
-            if (resourceCompoent != null)
+            // ResourceComponent resourceCompoent = GameEntry.GetComponent<ResourceComponent>();
+            // if (resourceCompoent != null)
+            // {
+            //     resourceCompoent.ForceUnloadUnusedAssets(true);
+            // }
+
+            AssetComponent assetComponent = GameEntry.GetComponent<AssetComponent>();
+            if (assetComponent != null)
             {
-                resourceCompoent.ForceUnloadUnusedAssets(true);
+                // TODO 低可用内存回调，释放无用的资源引用。
             }
         }
     }

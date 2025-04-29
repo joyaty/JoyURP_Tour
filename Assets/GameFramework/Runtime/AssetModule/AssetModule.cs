@@ -1,5 +1,4 @@
 
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityGameFramework.Runtime;
 using YooAsset;
@@ -9,8 +8,10 @@ namespace GameFramework.Resource
     /// <summary>
     /// 基于YooAssets资源管理插件封装的资源管理模块实现
     /// </summary>
-    public sealed class AssetModule : IAssetModule
+    internal sealed class AssetModule : GameFrameworkModule, IAssetModule
     {
+        internal override int Priority => 3;
+
         /// <summary>
         /// 资源管理模块是否初始化完成
         /// </summary>
@@ -20,6 +21,14 @@ namespace GameFramework.Resource
         /// 默认资源包名
         /// </summary>
         private string m_DefaultPackageName = "";
+
+        internal override void Update(float elapseSeconds, float realElapseSeconds)
+        {
+        }
+
+        internal override void Shutdown()
+        {
+        }
 
         public void Initialize(string defaultPackageName)
         {
@@ -49,7 +58,7 @@ namespace GameFramework.Resource
                 EnumAssetWorkingMode.EditorMode => await InitializationWithEditorMode(package),
                 EnumAssetWorkingMode.LocalMode => await InitializationWithLocalMode(package, resDecryption),
                 EnumAssetWorkingMode.HostMode => await InitializationWithHostMode(package, remoteResURLs, resDecryption),
-                EnumAssetWorkingMode.WebMode => await InitializationWithWebMode(package),
+                // EnumAssetWorkingMode.WebMode => await InitializationWithWebMode(package),
                 _ => null,
             };
         }
@@ -167,13 +176,13 @@ namespace GameFramework.Resource
             return initializationOperation;
         }
 
-        /// <summary>
-        /// 小游戏模式
-        /// </summary>
-        private async UniTask<InitializationOperation> InitializationWithWebMode(ResourcePackage package)
-        {
-            LogUtil.Fatal("InitializationWithWebMode, UnDefined!");
-            return null;
-        }
+        // /// <summary>
+        // /// 小游戏模式
+        // /// </summary>
+        // private async UniTask<InitializationOperation> InitializationWithWebMode(ResourcePackage package)
+        // {
+        //     LogUtil.Fatal("InitializationWithWebMode, UnDefined!");
+        //     return null;
+        // }
     }
 }

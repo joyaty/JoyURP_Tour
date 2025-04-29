@@ -15,7 +15,7 @@ namespace UnityGameFramework.Runtime
     /// </summary>
     public class DefaultUIFormHelper : UIFormHelperBase
     {
-        private ResourceComponent m_ResourceComponent = null;
+        // private ResourceComponent m_ResourceComponent = null;
 
         /// <summary>
         /// 实例化界面。
@@ -57,18 +57,18 @@ namespace UnityGameFramework.Runtime
         /// <param name="uiFormInstance">要释放的界面实例。</param>
         public override void ReleaseUIForm(object uiFormAsset, object uiFormInstance)
         {
-            m_ResourceComponent.UnloadAsset(uiFormAsset);
+            // m_ResourceComponent.UnloadAsset(uiFormAsset);
             Destroy((Object)uiFormInstance);
         }
 
         private void Start()
         {
-            m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
-            if (m_ResourceComponent == null)
-            {
-                LogUtil.Fatal("Resource component is invalid.");
-                return;
-            }
+            // m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
+            // if (m_ResourceComponent == null)
+            // {
+            //     LogUtil.Fatal("Resource component is invalid.");
+            //     return;
+            // }
         }
     }
 }
