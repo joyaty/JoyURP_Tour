@@ -6,7 +6,7 @@ namespace GameFramework.Resource
     /// <summary>
     /// 资源模块工作模式
     /// </summary>
-    public enum EnumResWorkingMode : byte
+    public enum EnumAssetWorkingMode : byte
     {
         EditorMode = 0,         // 编辑器模式
         LocalMode = 1,          // 本地资源模式
@@ -17,21 +17,21 @@ namespace GameFramework.Resource
     /// <summary>
     /// 资源管理模块的一些扩展方法定义
     /// </summary>
-    public static class ResModuleExtension
+    public static class AssetModuleExtension
     {
         /// <summary>
         /// EnumResModuleWorkingMode => YooAsset.EPlayMode
         /// </summary>
         /// <param name="workingMode"></param>
         /// <returns></returns>
-        public static EPlayMode ToEPlayMode(this EnumResWorkingMode workingMode)
+        public static EPlayMode ToEPlayMode(this EnumAssetWorkingMode workingMode)
         {
             return workingMode switch
             {
-                EnumResWorkingMode.EditorMode => EPlayMode.EditorSimulateMode,
-                EnumResWorkingMode.LocalMode => EPlayMode.OfflinePlayMode,
-                EnumResWorkingMode.HostMode => EPlayMode.HostPlayMode,
-                EnumResWorkingMode.WebMode => EPlayMode.WebPlayMode,
+                EnumAssetWorkingMode.EditorMode => EPlayMode.EditorSimulateMode,
+                EnumAssetWorkingMode.LocalMode => EPlayMode.OfflinePlayMode,
+                EnumAssetWorkingMode.HostMode => EPlayMode.HostPlayMode,
+                EnumAssetWorkingMode.WebMode => EPlayMode.WebPlayMode,
                 _ => EPlayMode.CustomPlayMode,
             };
         }

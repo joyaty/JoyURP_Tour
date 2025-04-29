@@ -20,7 +20,7 @@ namespace Joy.Base.Procedure
 
         private async UniTaskVoid RequestPackageVersion(IFsm<IProcedureManager> procedureOwner)
         {
-            ResComponent resComponent = GameEntry.GetComponent<ResComponent>();
+            AssetComponent resComponent = GameEntry.GetComponent<AssetComponent>();
             var (isSuccess, versionCode) = await resComponent.RequestPackageVersion(resComponent.DefaultPackageName);
             if (isSuccess)
             {

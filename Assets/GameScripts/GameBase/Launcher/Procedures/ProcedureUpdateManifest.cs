@@ -20,13 +20,13 @@ namespace Joy.Base.Procedure
 
         private async UniTaskVoid UpdatePackageManifest(IFsm<IProcedureManager> procedureOwner)
         {
-            ResComponent resComponent = GameEntry.GetComponent<ResComponent>();
+            AssetComponent resComponent = GameEntry.GetComponent<AssetComponent>();
             VarString resVersionCode = procedureOwner.GetData<VarString>(GlobalDefine.kProcedurePackageVersionKey);
             bool isSuccess = await resComponent.UpdatePackageManifest(resVersionCode.Value, resComponent.DefaultPackageName);
             if (isSuccess)
             {
                 LogUtil.Debug("更新资源清单文件成功, PackageName = {0}, ResVersion = {1}", resComponent.DefaultPackageName, resVersionCode.Value);
-                if (resComponent.WorkingMode == GameFramework.Resource.EnumResWorkingMode.HostMode)
+                if (resComponent.WorkingMode == GameFramework.Resource.EnumAssetWorkingMode.HostMode)
                 { // 可能需要远程更新游戏资源，进入热更新流程
 
                 }

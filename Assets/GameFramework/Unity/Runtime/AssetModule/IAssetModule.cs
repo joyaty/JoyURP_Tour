@@ -27,7 +27,7 @@ namespace GameFramework.Resource
         /// <param name="workingMode">资源模块工作模式</param>
         /// <param name="remoteResURLs">远程资源更新地址集合</param>
         /// <param name="resDecryption">(可选)资源解密接口</param>
-        UniTask<InitializationOperation> InitializePackage(string packageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null);
+        UniTask<InitializationOperation> InitializePackage(string packageName, EnumAssetWorkingMode workingMode, string[] remoteResURLs = null, IAssetDecryptionService resDecryption = null);
 
         /// <summary>
         /// 检查资源版本号

@@ -6,7 +6,7 @@ namespace GameFramework.Resource
     /// <summary>
     /// 资源加密Services
     /// </summary>
-    public interface IResDecryptionService : IDecryptionServices
+    public interface IAssetDecryptionService : IDecryptionServices
     {
     }
 }

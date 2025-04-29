@@ -32,7 +32,7 @@ namespace GameFramework.Resource
             YooAssets.SetDefaultPackage(package);
         }
 
-        public async UniTask<InitializationOperation> InitializePackage(string packageName, EnumResWorkingMode workingMode, string[] remoteResURLs = null, IResDecryptionService resDecryption = null)
+        public async UniTask<InitializationOperation> InitializePackage(string packageName, EnumAssetWorkingMode workingMode, string[] remoteResURLs = null, IAssetDecryptionService resDecryption = null)
         {
 #if !UNITY_EDITOR
             // 非编辑器下，禁止使用编辑器模式初始化资源模块
@@ -46,10 +46,10 @@ namespace GameFramework.Resource
             // 初始化资源包
             return workingMode switch
             { 
-                EnumResWorkingMode.EditorMode => await InitializationWithEditorMode(package),
-                EnumResWorkingMode.LocalMode => await InitializationWithLocalMode(package, resDecryption),
-                EnumResWorkingMode.HostMode => await InitializationWithHostMode(package, remoteResURLs, resDecryption),
-                EnumResWorkingMode.WebMode => await InitializationWithWebMode(package),
+                EnumAssetWorkingMode.EditorMode => await InitializationWithEditorMode(package),
+                EnumAssetWorkingMode.LocalMode => await InitializationWithLocalMode(package, resDecryption),
+                EnumAssetWorkingMode.HostMode => await InitializationWithHostMode(package, remoteResURLs, resDecryption),
+                EnumAssetWorkingMode.WebMode => await InitializationWithWebMode(package),
                 _ => null,
             };
         }
@@ -123,7 +123,7 @@ namespace GameFramework.Resource
         /// </summary>
         /// <param name="package"></param>
         /// <param name="decryptionService"></param>
-        private async UniTask<InitializationOperation> InitializationWithLocalMode(ResourcePackage package, IResDecryptionService decryptionService)
+        private async UniTask<InitializationOperation> InitializationWithLocalMode(ResourcePackage package, IAssetDecryptionService decryptionService)
         {
             // YooAsset默认路径下构建文件系统参数(项目路径/Assets/StreamingAssets)
             FileSystemParameters fileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(decryptionService);
@@ -142,7 +142,7 @@ namespace GameFramework.Resource
         /// <param name="package"></param>
         /// <param name="remoteResURLs"></param>
         /// <param name="decryptionService"></param>
-        private async UniTask<InitializationOperation> InitializationWithHostMode(ResourcePackage package, string[] remoteResURLs, IResDecryptionService decryptionService)
+        private async UniTask<InitializationOperation> InitializationWithHostMode(ResourcePackage package, string[] remoteResURLs, IAssetDecryptionService decryptionService)
         {
             if (remoteResURLs == null || remoteResURLs.Length <= 0)
             {

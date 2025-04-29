@@ -11,14 +11,16 @@ namespace UnityGameFramework
     /// <summary>
     /// 资源管理模块组件
     /// </summary>
-    public sealed class ResComponent : GameFrameworkComponent
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Game Framework/AssetComponent")]
+    public sealed class AssetComponent : GameFrameworkComponent
     {
         #region 脚本可配置项
 
         /// <summary>
         /// 资源管理模块工作模式
         /// </summary>
-        [SerializeField] private EnumResWorkingMode m_WorkingMode;
+        [SerializeField] private EnumAssetWorkingMode m_WorkingMode;
 
         /// <summary>
         /// 默认资源包包名
@@ -55,7 +57,7 @@ namespace UnityGameFramework
         /// <summary>
         /// 资源包工作模式
         /// </summary>
-        public EnumResWorkingMode WorkingMode => m_WorkingMode;
+        public EnumAssetWorkingMode WorkingMode => m_WorkingMode;
 
         private void Start()
         {
@@ -77,7 +79,7 @@ namespace UnityGameFramework
         {
             string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
             string[] remoteURLs = null;
-            if (m_WorkingMode == EnumResWorkingMode.HostMode)
+            if (m_WorkingMode == EnumAssetWorkingMode.HostMode)
             {
                 remoteURLs = new string[] { m_RemoteMainURL, m_RemoteFallbackURL };
             }

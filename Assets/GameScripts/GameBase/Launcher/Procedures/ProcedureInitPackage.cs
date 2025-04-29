@@ -20,11 +20,11 @@ namespace Joy.Base.Procedure
         /// <summary>
         /// 资源管理模块对外组件
         /// </summary>
-        private ResComponent m_ResComponent;
+        private AssetComponent m_ResComponent;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
-            m_ResComponent = GameEntry.GetComponent<ResComponent>();
+            m_ResComponent = GameEntry.GetComponent<AssetComponent>();
             InitializePackage(procedureOwner).Forget();
         }
 
