@@ -67,7 +67,7 @@ namespace UnityGameFramework
             }
             // 创建资源管理实现模块，并且初始化
             m_AssetModule = GameFrameworkEntry.GetModule<IAssetModule>();
-            m_AssetModule.Initialize(m_DefaultPackageName);
+            m_AssetModule.Initialize(m_DefaultPackageName, LogUtil.GetLogHelper() as YooAsset.ILogger);
         }
 
         /// <summary>

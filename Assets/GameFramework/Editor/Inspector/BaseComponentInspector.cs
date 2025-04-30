@@ -236,7 +236,7 @@ namespace UnityGameFramework.Editor
                 NoneOptionName
             };
 
-            logHelperTypeNames.AddRange(Type.GetRuntimeTypeNames(typeof(GameFrameworkLog.ILogHelper)));
+            logHelperTypeNames.AddRange(Type.GetRuntimeTypeNames(typeof(ILogHelper)));
             m_LogHelperTypeNames = logHelperTypeNames.ToArray();
             m_LogHelperTypeNameIndex = 0;
             if (!string.IsNullOrEmpty(m_LogHelperTypeName.stringValue))

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityGameFramework.Runtime;
 
 namespace GameFramework
 {
@@ -43,7 +44,7 @@ namespace GameFramework
             s_GameFrameworkModules.Clear();
             ReferencePool.ClearAll();
             Utility.Marshal.FreeCachedHGlobal();
-            GameFrameworkLog.SetLogHelper(null);
+            LogUtil.SetLogHelper(null);
         }
 
         /// <summary>

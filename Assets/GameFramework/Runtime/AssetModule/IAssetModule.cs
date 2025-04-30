@@ -1,5 +1,6 @@
 
 using Cysharp.Threading.Tasks;
+using UnityGameFramework.Runtime;
 using YooAsset;
 
 namespace GameFramework.Resource
@@ -18,7 +19,8 @@ namespace GameFramework.Resource
         /// 初始化资源模块
         /// </summary>
         /// <param name="defaultPackageName">默认资源包</param>
-        void Initialize(string defaultPackageName);
+        /// <param name="logHelper">调试信息输出工具</param>
+        void Initialize(string defaultPackageName, YooAsset.ILogger logHelper = null);
 
         /// <summary>
         /// 初始化资源包

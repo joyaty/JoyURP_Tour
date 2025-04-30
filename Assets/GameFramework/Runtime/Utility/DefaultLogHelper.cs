@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using GameFramework;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 默认游戏框架日志辅助器。
     /// </summary>
-    public class DefaultLogHelper : GameFrameworkLog.ILogHelper
+    internal class DefaultLogHelper : ILogHelper, YooAsset.ILogger
     {
         /// <summary>
         /// 记录日志。
@@ -44,5 +45,45 @@ namespace UnityGameFramework.Runtime
                     throw new GameFrameworkException(message.ToString());
             }
         }
+
+        #region YooAssets插件接口定义的调试信息初始接口
+
+        /// <summary>
+        /// 输出调试级别日志输出
+        /// </summary>
+        /// <param name="message"></param>
+        public void Log(string message)
+        {
+            LogUtil.Info(message);
+        }
+
+        /// <summary>
+        /// 输出警告级别日志输出
+        /// </summary>
+        /// <param name="message"></param>
+        public void Warning(string message)
+        {
+            LogUtil.Warning(message);
+        }
+
+        /// <summary>
+        /// 输出错误级别日志信息
+        /// </summary>
+        /// <param name="message"></param>
+        public void Error(string message)
+        {
+            LogUtil.Error(message);
+        }
+
+        /// <summary>
+        /// 输出异常级别日志信息
+        /// </summary>
+        /// <param name="exception"></param>
+        public void Exception(Exception exception)
+        {
+            LogUtil.Fatal(exception);
+        }
+        
+        #endregion
     }
 }

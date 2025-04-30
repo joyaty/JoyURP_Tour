@@ -30,10 +30,10 @@ namespace GameFramework.Resource
         {
         }
 
-        public void Initialize(string defaultPackageName)
+        public void Initialize(string defaultPackageName, ILogger logHelper = null)
         {
             // 初始化YooAssets模块，
-            YooAssets.Initialize();
+            YooAssets.Initialize(logHelper);
             // 设置默认资源包
             m_DefaultPackageName = defaultPackageName;
             ResourcePackage package = YooAssets.TryGetPackage(defaultPackageName);

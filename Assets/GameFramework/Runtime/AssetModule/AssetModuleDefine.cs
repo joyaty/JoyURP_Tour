@@ -1,6 +1,4 @@
 
-using YooAsset;
-
 namespace GameFramework.Resource
 {
     /// <summary>
@@ -20,19 +18,19 @@ namespace GameFramework.Resource
     public static class AssetModuleExtension
     {
         /// <summary>
-        /// EnumResModuleWorkingMode => YooAsset.EPlayMode
+        /// EnumAssetWorkingMode => YooAsset.EPlayMode
         /// </summary>
         /// <param name="workingMode"></param>
         /// <returns></returns>
-        public static EPlayMode ToEPlayMode(this EnumAssetWorkingMode workingMode)
+        public static YooAsset.EPlayMode ToEPlayMode(this EnumAssetWorkingMode workingMode)
         {
             return workingMode switch
             {
-                EnumAssetWorkingMode.EditorMode => EPlayMode.EditorSimulateMode,
-                EnumAssetWorkingMode.LocalMode => EPlayMode.OfflinePlayMode,
-                EnumAssetWorkingMode.HostMode => EPlayMode.HostPlayMode,
-                EnumAssetWorkingMode.WebMode => EPlayMode.WebPlayMode,
-                _ => EPlayMode.CustomPlayMode,
+                EnumAssetWorkingMode.EditorMode => YooAsset.EPlayMode.EditorSimulateMode,
+                EnumAssetWorkingMode.LocalMode => YooAsset.EPlayMode.OfflinePlayMode,
+                EnumAssetWorkingMode.HostMode => YooAsset.EPlayMode.HostPlayMode,
+                EnumAssetWorkingMode.WebMode => YooAsset.EPlayMode.WebPlayMode,
+                _ => YooAsset.EPlayMode.CustomPlayMode,
             };
         }
     }
