@@ -1,5 +1,6 @@
 
 using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
 using YooAsset;
 
@@ -30,6 +31,8 @@ namespace GameFramework.Resource
         {
         }
 
+        #region 初始化相关
+
         public void Initialize(string defaultPackageName, ILogger logHelper = null)
         {
             // 初始化YooAssets模块，
@@ -54,7 +57,7 @@ namespace GameFramework.Resource
             package ??= YooAssets.CreatePackage(packageName);
             // 初始化资源包
             return workingMode switch
-            { 
+            {
                 EnumAssetWorkingMode.EditorMode => await InitializationWithEditorMode(package),
                 EnumAssetWorkingMode.LocalMode => await InitializationWithLocalMode(package, resDecryption),
                 EnumAssetWorkingMode.HostMode => await InitializationWithHostMode(package, remoteResURLs, resDecryption),
@@ -184,5 +187,31 @@ namespace GameFramework.Resource
         //     LogUtil.Fatal("InitializationWithWebMode, UnDefined!");
         //     return null;
         // }
+
+        #endregion
+
+        #region 资源加载相关
+
+        /// <summary>
+        /// 同步方式加载场景
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="packageName"></param>
+        public UnityEngine.SceneManagement.Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
+        {
+            SceneHandle sceneHandle = null;
+            if (string.IsNullOrEmpty(packageName))
+            {
+                sceneHandle = YooAssets.LoadSceneSync(location, loadSceneMode);
+            }
+            else
+            {
+                ResourcePackage package = GetPackage(packageName);
+                sceneHandle = package.LoadSceneSync(location, loadSceneMode);
+            }
+            return sceneHandle.SceneObject;
+        }
+
+        #endregion
     }
 }

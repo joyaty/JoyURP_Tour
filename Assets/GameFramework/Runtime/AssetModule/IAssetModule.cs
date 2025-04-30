@@ -1,5 +1,6 @@
 
 using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
 using YooAsset;
 
@@ -52,5 +53,12 @@ namespace GameFramework.Resource
         /// <param name="packageName">资源包名称，空为默认资源包</param>
         /// <returns></returns>
         ResourcePackage GetPackage(string packageName = "");
+
+        /// <summary>
+        /// 加载场景 - 同步方式
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="packageName"></param>
+        UnityEngine.SceneManagement.Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "");
     }
 }

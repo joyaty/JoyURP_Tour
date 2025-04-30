@@ -5,6 +5,7 @@ using GameFramework.Resource;
 using UnityGameFramework.Runtime;
 using Cysharp.Threading.Tasks;
 using YooAsset;
+using UnityEngine.SceneManagement;
 
 namespace UnityGameFramework
 {
@@ -110,6 +111,11 @@ namespace UnityGameFramework
             string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
             UpdatePackageManifestOperation updatePackageManifestOperation = await m_AssetModule.UpdatePackageManifest(resVersionCode, name);
             return updatePackageManifestOperation.Status == EOperationStatus.Succeed;
+        }
+
+        public Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
+        {
+            return m_AssetModule.LoadSceneSync(location, loadSceneMode, packageName);
         }
     }
 }

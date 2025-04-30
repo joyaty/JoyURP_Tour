@@ -1,6 +1,9 @@
 
+using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
+using UnityEngine.SceneManagement;
+using UnityGameFramework;
 using UnityGameFramework.Runtime;
 
 namespace Joy.Base.Procedure
@@ -12,7 +15,14 @@ namespace Joy.Base.Procedure
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
-            LogUtil.Debug("Game Start");
+            LoadGameMainScene().Forget();
+        }
+
+        private async UniTask LoadGameMainScene()
+        {
+            AssetComponent assetComponent = GameEntry.GetComponent<AssetComponent>();
+            assetComponent.LoadSceneSync("GameMain", LoadSceneMode.Single);
+            await UniTask.DelayFrame(10);
         }
     }
 }
