@@ -425,17 +425,22 @@ PrefabInstance:
     - target: {fileID: 7731078500002162402, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7731078500002162402, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8685424870943223966, guid: f8d005f5829ab98428d96c551a001f01,
         type: 3}
       propertyPath: m_Name
       value: UI_HotfixPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685424870943223966, guid: f8d005f5829ab98428d96c551a001f01,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -525,7 +530,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
