@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using Joy.Base.Define;
+using UnityEngine;
 using UnityGameFramework;
 using UnityGameFramework.Runtime;
 
@@ -15,6 +16,7 @@ namespace Joy.Base.Procedure
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
+            OpenHotfixUIPanel();
             RequestPackageVersion(procedureOwner).Forget();
         }
 
@@ -24,7 +26,7 @@ namespace Joy.Base.Procedure
             var (isSuccess, versionCode) = await resComponent.RequestPackageVersion(resComponent.DefaultPackageName);
             if (isSuccess)
             {
-                LogUtil.Debug("请求资源版本成功, PackageName = {0}, Version = {1}", resComponent.DefaultPackageName, versionCode);
+                LogUtil.Debug("请求资源版本成功, PackageName = {0}, Version = {1}, Frame = {2}", resComponent.DefaultPackageName, versionCode, Time.frameCount);
                 // 写入资源版本号到流程管理器中，用于后续流程使用
                 procedureOwner.SetData<VarString>(GlobalDefine.kProcedurePackageVersionKey, versionCode);
                 // 切换到更新资源列表文件流程节点
@@ -34,6 +36,12 @@ namespace Joy.Base.Procedure
             {
                 LogUtil.Error("请求资源版本失败, PackageName = {0}", resComponent.DefaultPackageName);
             }
+        }
+
+        // 打开热更新UI
+        private void OpenHotfixUIPanel()
+        {
+
         }
     }
 }

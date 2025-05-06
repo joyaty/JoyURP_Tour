@@ -3,6 +3,8 @@ using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using Joy.Base.Define;
+using Joy.Base.Event;
+using UnityEngine;
 using UnityGameFramework;
 using UnityGameFramework.Runtime;
 
@@ -25,7 +27,7 @@ namespace Joy.Base.Procedure
             bool isSuccess = await resComponent.UpdatePackageManifest(resVersionCode.Value, resComponent.DefaultPackageName);
             if (isSuccess)
             {
-                LogUtil.Debug("更新资源清单文件成功, PackageName = {0}, ResVersion = {1}", resComponent.DefaultPackageName, resVersionCode.Value);
+                LogUtil.Debug("更新资源清单文件成功, PackageName = {0}, ResVersion = {1}, Frame = {2}", resComponent.DefaultPackageName, resVersionCode.Value, Time.frameCount);
                 if (resComponent.WorkingMode == GameFramework.Resource.EnumAssetWorkingMode.HostMode)
                 { // 可能需要远程更新游戏资源，进入热更新流程
 
