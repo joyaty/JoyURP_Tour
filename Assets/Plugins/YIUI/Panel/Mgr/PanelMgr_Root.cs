@@ -27,8 +27,8 @@ namespace YIUIFramework
 
         #region 以下名称 禁止修改
 
-        public const string UIRootName      = "YIUIRoot";
-        public const string UILayerRootName = "YIUILayerRoot";
+        public const string UIRootName      = "UIRoot";
+        public const string UILayerRootName = "UILayerRoot";
         public const string UIRootPkgName   = "Common";
 
         #endregion
