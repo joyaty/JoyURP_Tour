@@ -83,3 +83,14 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/yoo
 /[Aa]ssets/[Ss]treamingAssets/yoo.meta
 /yoo
+
+# YIUIAssets
+/[Aa]ssets/Plugins/YIUI/Plugins/CoEvent/
+/[Aa]ssets/Plugins/YIUI/Plugins/CoEvent.meta
+
+# Plugins
+/[Aa]ssets/Plugins/Sirenix
+/[Aa]ssets/Plugins/Sirenix.meta
+/[Aa]ssets/Plugins/Demigiant
+/[Aa]ssets/Plugins/Demigiant.meta
+
