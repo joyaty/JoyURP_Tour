@@ -5,7 +5,7 @@ using GameFramework.Event;
 namespace Joy.Base.Event
 {
     /// <summary>
-    /// 资源模块初始化资源包结构事件参数
+    /// 资源模块资源包初始化结束事件参数
     /// </summary>
     public sealed class EventInitPackageOverArgs : GameEventArgs
     {

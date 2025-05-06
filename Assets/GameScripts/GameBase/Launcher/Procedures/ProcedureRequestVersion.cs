@@ -16,7 +16,7 @@ namespace Joy.Base.Procedure
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
-            OpenHotfixUIPanel();
+            
             RequestPackageVersion(procedureOwner).Forget();
         }
 
@@ -38,10 +38,6 @@ namespace Joy.Base.Procedure
             }
         }
 
-        // 打开热更新UI
-        private void OpenHotfixUIPanel()
-        {
-
-        }
+        
     }
 }
