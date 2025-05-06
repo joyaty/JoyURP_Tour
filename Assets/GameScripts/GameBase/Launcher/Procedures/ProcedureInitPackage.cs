@@ -39,6 +39,7 @@ namespace Joy.Base.Procedure
             {
                 LogUtil.Debug("初始化资源包成功，PackageName = {0}，Frame = {1}", resComponent.DefaultPackageName, Time.frameCount);
                 // 切换到资源版本号校验节点
+                await UniTask.Delay(500);
                 ChangeState<ProcedureRequestVersion>(procedureOwner);
             }
             else
@@ -49,10 +50,11 @@ namespace Joy.Base.Procedure
         }
 
         // 打开热更新UI
-        private async Task OpenHotfixUIPanel()
+        private void OpenHotfixUIPanel()
         {
             GameObject go = GameObject.Find("Canvas");
-            Object hotfixUI = await Resources.LoadAsync<GameObject>("").ToUniTask();
+            GameObject hotfixUI = Resources.Load<GameObject>("HotfixPanel/Prefabs/UI_HotfixPanel");
+            GameObject uiInstance = GameObject.Instantiate(hotfixUI, go.transform);
         }
     }
 }

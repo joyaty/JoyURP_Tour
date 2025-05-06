@@ -30,6 +30,7 @@ namespace Joy.Base.Procedure
                 // 写入资源版本号到流程管理器中，用于后续流程使用
                 procedureOwner.SetData<VarString>(GlobalDefine.kProcedurePackageVersionKey, versionCode);
                 // 切换到更新资源列表文件流程节点
+                await UniTask.Delay(500);
                 ChangeState<ProcedureUpdateManifest>(procedureOwner);
             }
             else

@@ -28,6 +28,7 @@ namespace Joy.Base.Procedure
             if (isSuccess)
             {
                 LogUtil.Debug("更新资源清单文件成功, PackageName = {0}, ResVersion = {1}, Frame = {2}", resComponent.DefaultPackageName, resVersionCode.Value, Time.frameCount);
+                await UniTask.Delay(500);
                 if (resComponent.WorkingMode == GameFramework.Resource.EnumAssetWorkingMode.HostMode)
                 { // 可能需要远程更新游戏资源，进入热更新流程
 
