@@ -28,6 +28,10 @@ namespace Joy.Base.Procedure
             if (isSuccess)
             {
                 LogUtil.Debug("更新资源清单文件成功, PackageName = {0}, ResVersion = {1}, Frame = {2}", resComponent.DefaultPackageName, resVersionCode.Value, Time.frameCount);
+                // 通知外部资源清单更新完成
+                EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
+                eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(EnumHotfixKeyPoint.MANIFEST_UPDATE));
+                // 等待一小段时间作为表现层的表现时长
                 await UniTask.Delay(500);
                 if (resComponent.WorkingMode == GameFramework.Resource.EnumAssetWorkingMode.HostMode)
                 { // 可能需要远程更新游戏资源，进入热更新流程
@@ -35,6 +39,8 @@ namespace Joy.Base.Procedure
                 }
                 else
                 { // 资源准备完成，进入游戏开始流程
+                    eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(EnumHotfixKeyPoint.ALL_END));
+                    await UniTask.Delay(200);
                     ChangeState<ProcedureGameStart>(procedureOwner);
                 }
             }

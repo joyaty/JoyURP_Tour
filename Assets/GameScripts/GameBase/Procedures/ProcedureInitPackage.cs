@@ -1,8 +1,8 @@
 
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
+using Joy.Base.Event;
 using UnityEngine;
 using UnityGameFramework;
 using UnityGameFramework.Runtime;
@@ -19,8 +19,11 @@ namespace Joy.Base.Procedure
         /// </summary>
         public const string RES_MANAGER_INIT_MODE = "RES_MANAGER_INIT_MODE";
 
+        private EventComponent m_EventComponent;
+
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
+            m_EventComponent = GameEntry.GetComponent<EventComponent>();
             OpenHotfixUIPanel();
             InitializePackage(procedureOwner).Forget();
         }
@@ -38,8 +41,12 @@ namespace Joy.Base.Procedure
             if (isSuccess)
             {
                 LogUtil.Debug("初始化资源包成功，PackageName = {0}，Frame = {1}", resComponent.DefaultPackageName, Time.frameCount);
-                // 切换到资源版本号校验节点
+                // 通知外部资源包初始化完成
+                EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
+                eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(Define.EnumHotfixKeyPoint.PACKAGE_INIT_OVER));
+                // 给表现层一段进度更新时间
                 await UniTask.Delay(500);
+                // 切换到资源版本号校验节点
                 ChangeState<ProcedureRequestVersion>(procedureOwner);
             }
             else
@@ -52,9 +59,10 @@ namespace Joy.Base.Procedure
         // 打开热更新UI
         private void OpenHotfixUIPanel()
         {
-            GameObject go = GameObject.Find("Canvas");
+            // TODO 使用UI框架打开热更新UI
+            GameObject canvas = GameObject.Find("Canvas");
             GameObject hotfixUI = Resources.Load<GameObject>("HotfixPanel/Prefabs/UI_HotfixPanel");
-            GameObject uiInstance = GameObject.Instantiate(hotfixUI, go.transform);
+            GameObject.Instantiate(hotfixUI, canvas.transform);
         }
     }
 }

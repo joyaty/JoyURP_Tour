@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using Joy.Base.Define;
+using Joy.Base.Event;
 using UnityEngine;
 using UnityGameFramework;
 using UnityGameFramework.Runtime;
@@ -29,8 +30,12 @@ namespace Joy.Base.Procedure
                 LogUtil.Debug("请求资源版本成功, PackageName = {0}, Version = {1}, Frame = {2}", resComponent.DefaultPackageName, versionCode, Time.frameCount);
                 // 写入资源版本号到流程管理器中，用于后续流程使用
                 procedureOwner.SetData<VarString>(GlobalDefine.kProcedurePackageVersionKey, versionCode);
-                // 切换到更新资源列表文件流程节点
+                // 通知外部资源包版本号检查完成
+                EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
+                eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(EnumHotfixKeyPoint.VERSION_CHECK_OVER));
+                // 给表现层一段进度更新时间
                 await UniTask.Delay(500);
+                // 切换到更新资源列表文件流程节点
                 ChangeState<ProcedureUpdateManifest>(procedureOwner);
             }
             else
