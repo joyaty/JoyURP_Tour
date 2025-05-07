@@ -96,5 +96,7 @@ crashlytics-build.properties
 
 # HybridCLR
 /HybridCLRData
+/[Aa]ssets/HybridCLRGenerate
+/[Aa]ssets/HybridCLRGenerate.meta
 
 

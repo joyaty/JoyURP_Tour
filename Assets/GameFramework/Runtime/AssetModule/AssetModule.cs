@@ -48,7 +48,7 @@ namespace GameFramework.Resource
         {
 #if !UNITY_EDITOR
             // 非编辑器下，禁止使用编辑器模式初始化资源模块
-            if (workingMode == EnumResWorkingMode.EditorMode)
+            if (workingMode == EnumAssetWorkingMode.EditorMode)
             {
                 LogUtil.Error("非编辑器模式下, 禁止使用编辑器模式初始化资源模块, workingMode = {0}", workingMode);
             }
