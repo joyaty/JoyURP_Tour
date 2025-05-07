@@ -19,11 +19,8 @@ namespace Joy.Base.Procedure
         /// </summary>
         public const string RES_MANAGER_INIT_MODE = "RES_MANAGER_INIT_MODE";
 
-        private EventComponent m_EventComponent;
-
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
-            m_EventComponent = GameEntry.GetComponent<EventComponent>();
             OpenHotfixUIPanel();
             InitializePackage(procedureOwner).Forget();
         }

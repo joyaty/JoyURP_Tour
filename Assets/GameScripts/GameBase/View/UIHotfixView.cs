@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using GameFramework;
 using GameFramework.Event;
 using Joy.Base.Define;
 using Joy.Base.Event;
@@ -35,6 +36,14 @@ namespace Joy.Base.UI
         /// </summary>
         [SerializeField] private TextMeshProUGUI m_Tips;
 
+        /// <summary>
+        /// 进度条数值信息
+        /// </summary>
+        [SerializeField] private TextMeshProUGUI m_ProgressValue;
+
+        /// <summary>
+        /// 事件管理组件
+        /// </summary>
         private EventComponent m_EventComponent;
 
         /// <summary>
@@ -85,6 +94,7 @@ namespace Joy.Base.UI
             if (m_Progress.value < m_ProgressMax)
             {
                 ++m_Progress.value;
+                m_ProgressValue.text = Utility.Text.Format("{0}%", m_Progress.value);
             }
         }
 
@@ -114,6 +124,7 @@ namespace Joy.Base.UI
             {
                 m_Progress.value = m_ProgressMax - 3;
             }
+            m_ProgressValue.text = Utility.Text.Format("{0}%", m_Progress.value);
         }
 
         /// <summary>

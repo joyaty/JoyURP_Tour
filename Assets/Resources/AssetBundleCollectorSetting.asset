@@ -24,35 +24,6 @@ MonoBehaviour:
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
-    - GroupName: JoyAssets
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/JoyURPAssets/Materials
-        CollectorGUID: 3a970a9bbc2a64d99b569fa8307f2245
-        CollectorType: 0
-        AddressRuleName: AddressByFolderAndFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/JoyURPAssets/Prefabs
-        CollectorGUID: 08d7b6488ed2b4214a72abb962f989b3
-        CollectorType: 0
-        AddressRuleName: AddressByFolderAndFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/JoyURPAssets/Shaders
-        CollectorGUID: 6f95739e00bb44012856a407fd2c4aa0
-        CollectorType: 0
-        AddressRuleName: AddressByFolderAndFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: Scene
       GroupDesc: 
       AssetTags: 
@@ -73,6 +44,19 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/GameRes/UI
         CollectorGUID: 822b20aa702aabd4c89bdabeba67eaf9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Models
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Models
+        CollectorGUID: f3197c1135e67411d8ef89139c1b8411
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
