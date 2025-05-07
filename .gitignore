@@ -94,3 +94,7 @@ crashlytics-build.properties
 /[Aa]ssets/Plugins/Demigiant
 /[Aa]ssets/Plugins/Demigiant.meta
 
+# HybridCLR
+/HybridCLRData
+
+
