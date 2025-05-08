@@ -60,5 +60,23 @@ namespace GameFramework.Resource
         /// <param name="location"></param>
         /// <param name="packageName"></param>
         UnityEngine.SceneManagement.Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "");
+
+        /// <summary>
+        /// 同步方式加载UnityEngine.Object资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="location"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        T LoadAssetSync<T>(string location, string packageName = "") where T : UnityEngine.Object;
+
+        /// <summary>
+        /// 异步加载UnityEngine.Object资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="location"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        UniTask<T> LoadAssetAsync<T>(string location, string packageName = "") where T : UnityEngine.Object;
     }
 }

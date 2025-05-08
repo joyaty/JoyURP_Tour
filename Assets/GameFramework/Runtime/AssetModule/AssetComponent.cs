@@ -6,6 +6,7 @@ using UnityGameFramework.Runtime;
 using Cysharp.Threading.Tasks;
 using YooAsset;
 using UnityEngine.SceneManagement;
+using dnlib.DotNet.Emit;
 
 namespace UnityGameFramework
 {
@@ -116,6 +117,16 @@ namespace UnityGameFramework
         public Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
         {
             return m_AssetModule.LoadSceneSync(location, loadSceneMode, packageName);
+        }
+
+        public T LoadAssetSync<T>(string location, string packageName = "") where T : UnityEngine.Object
+        {
+            return m_AssetModule.LoadAssetSync<T>(location, packageName);
+        }
+
+        public UniTask<T> LoadAssetAsync<T>(string location, string packageName = "") where T : UnityEngine.Object
+        {
+            return m_AssetModule.LoadAssetAsync<T>(location, packageName);
         }
     }
 }

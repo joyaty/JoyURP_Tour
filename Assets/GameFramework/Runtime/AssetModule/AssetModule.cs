@@ -1,4 +1,5 @@
 
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
@@ -192,24 +193,26 @@ namespace GameFramework.Resource
 
         #region 资源加载相关
 
-        /// <summary>
-        /// 同步方式加载场景
-        /// </summary>
-        /// <param name="location"></param>
-        /// <param name="packageName"></param>
         public UnityEngine.SceneManagement.Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
         {
-            SceneHandle sceneHandle = null;
-            if (string.IsNullOrEmpty(packageName))
-            {
-                sceneHandle = YooAssets.LoadSceneSync(location, loadSceneMode);
-            }
-            else
-            {
-                ResourcePackage package = GetPackage(packageName);
-                sceneHandle = package.LoadSceneSync(location, loadSceneMode);
-            }
+            ResourcePackage package = GetPackage(packageName);
+            SceneHandle sceneHandle = package.LoadSceneSync(location, loadSceneMode);
             return sceneHandle.SceneObject;
+        }
+
+        public T LoadAssetSync<T>(string location, string packageName = "") where T : UnityEngine.Object
+        {
+            ResourcePackage package = GetPackage(packageName);
+            AssetHandle assetHandle = package.LoadAssetSync<T>(location);
+            return assetHandle.AssetObject as T;
+        }
+
+        public async UniTask<T> LoadAssetAsync<T>(string location, string packageName = "") where T : UnityEngine.Object
+        {
+            ResourcePackage package = GetPackage(packageName);
+            AssetHandle handle = package.LoadAssetAsync<T>(location);
+            await handle.ToUniTask();
+            return handle.AssetObject as T;
         }
 
         #endregion

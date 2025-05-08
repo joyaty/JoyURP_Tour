@@ -63,13 +63,39 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: HotDlls
-      GroupDesc: 
+    - GroupName: AOTDlls
+      GroupDesc: "\u8865\u5145AOT\u5143\u6570\u636EDll"
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/HotDlls
-        CollectorGUID: 8c069df5d12fd12449daa4d683ea1b03
+      - CollectPath: Assets/GameRes/Dlls/AOTDlls
+        CollectorGUID: 051f32bb6ffec82449496d53bffb6eda
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: HotfixDlls
+      GroupDesc: "\u70ED\u66F4\u65B0Dll"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Dlls/HotDlls
+        CollectorGUID: 6e05bfb56444ea5439f61587bac5b9c6
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: DllManifest
+      GroupDesc: "Dll\u6E05\u5355\u63CF\u8FF0\u6587\u4EF6"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Dlls/DllManifest.json
+        CollectorGUID: 7e1c519c6cc4a1d479bcfe0d25885732
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
