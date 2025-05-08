@@ -1,5 +1,6 @@
 
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
 using YooAsset;
@@ -78,5 +79,13 @@ namespace GameFramework.Resource
         /// <param name="packageName"></param>
         /// <returns></returns>
         UniTask<T> LoadAssetAsync<T>(string location, string packageName = "") where T : UnityEngine.Object;
+
+        /// <summary>
+        /// 初始化场景GameObject
+        /// </summary>
+        /// <param name="prefab"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        UniTask<GameObject> InstantiateGameObjectAsync(string location, Transform parent = null, string packageName = "");
     }
 }

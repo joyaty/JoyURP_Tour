@@ -104,7 +104,8 @@ namespace Joy.Base.Procedure
         /// <returns></returns>
         private async UniTaskVoid RunHotfixEntry()
         {
-            GameObject hotfixEntryPrefab = await m_AssetComponent.LoadAssetAsync<GameObject>(HOTFIX_ENTRY_LOCATION);
+            await m_AssetComponent.InstantiateGameObject(HOTFIX_ENTRY_LOCATION);
+            // GameObject hotfixEntryPrefab = await m_AssetComponent.LoadAssetAsync<GameObject>(HOTFIX_ENTRY_LOCATION);
             // TODO 挂载热更新代码入口到当前场景上
             // m_AssetComponent.InitializeObject(hotfixEntryPrefab);
         }

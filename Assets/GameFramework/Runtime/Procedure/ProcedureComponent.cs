@@ -144,5 +144,23 @@ namespace UnityGameFramework.Runtime
         {
             return m_ProcedureManager.GetProcedure(procedureType);
         }
+
+        /// <summary>
+        /// 附加新的流程节点到流程模块中
+        /// </summary>
+        /// <param name="procedures">新增的流程节点</param>
+        public void ResetProcedures(ProcedureBase[] procedures)
+        {
+            m_ProcedureManager.ResetProcedureFsm(procedures);
+        }
+
+        /// <summary>
+        /// 启动某个流程状态机的节点
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void StartProcedure<T>() where T : ProcedureBase
+        {
+            m_ProcedureManager.StartProcedure<T>();
+        }
     }
 }

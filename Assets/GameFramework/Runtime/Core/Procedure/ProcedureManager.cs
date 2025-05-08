@@ -200,5 +200,17 @@ namespace GameFramework.Procedure
 
             return (ProcedureBase)m_ProcedureFsm.GetState(procedureType);
         }
+
+        public void ResetProcedureFsm(ProcedureBase[] procedureBases)
+        {
+            // 销毁现有的流程节点，清理流程状态机
+            if (m_ProcedureFsm != null)
+            {
+                m_FsmManager.DestroyFsm(m_ProcedureFsm);
+                m_ProcedureFsm = null;
+            }
+            // 重新初始化新的流程节点状态机
+            Initialize(m_FsmManager, procedureBases);
+        }
     }
 }

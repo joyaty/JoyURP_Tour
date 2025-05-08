@@ -1,9 +1,10 @@
 
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
 using YooAsset;
+using ILogger = YooAsset.ILogger;
 
 namespace GameFramework.Resource
 {
@@ -212,7 +213,17 @@ namespace GameFramework.Resource
             ResourcePackage package = GetPackage(packageName);
             AssetHandle handle = package.LoadAssetAsync<T>(location);
             await handle.ToUniTask();
-            return handle.AssetObject as T;
+            return handle.GetAssetObject<T>();
+        }
+
+        public async UniTask<GameObject> InstantiateGameObjectAsync(string location, Transform parent = null, string packageName = "")
+        {
+            ResourcePackage package = GetPackage(packageName);
+            AssetHandle handle = package.LoadAssetAsync<GameObject>(location);
+            await handle.ToUniTask();
+            InstantiateOperation instantiateOperation = handle.InstantiateAsync();
+            await instantiateOperation.ToUniTask();
+            return instantiateOperation.Result;
         }
 
         #endregion

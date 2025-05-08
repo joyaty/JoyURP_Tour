@@ -41,8 +41,8 @@ namespace Joy.Base.Procedure
                 { // 资源准备完成，进入游戏开始流程
                     eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(EnumHotfixKeyPoint.ALL_END));
                     await UniTask.Delay(200);
-                    // ChangeState<ProcedureGameStart>(procedureOwner);
-                    LogUtil.Debug("TODO 加载热更脚本，启动游戏内容。");
+                    ChangeState<ProcedureHotfixDLL>(procedureOwner);
+                    // LogUtil.Debug("TODO 加载热更脚本，启动游戏内容。");
                 }
             }
             else

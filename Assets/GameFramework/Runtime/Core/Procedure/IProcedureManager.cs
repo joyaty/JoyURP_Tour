@@ -77,5 +77,11 @@ namespace GameFramework.Procedure
         /// <param name="procedureType">要获取的流程类型。</param>
         /// <returns>要获取的流程。</returns>
         ProcedureBase GetProcedure(Type procedureType);
+
+        /// <summary>
+        /// 使用新的流程节点重置流程状态机
+        /// </summary>
+        /// <param name="procedureBases">附加的流程节点集合</param>
+        void ResetProcedureFsm(ProcedureBase[] procedureBases);
     }
 }

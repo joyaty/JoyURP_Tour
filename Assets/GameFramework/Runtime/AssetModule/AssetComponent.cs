@@ -128,5 +128,10 @@ namespace UnityGameFramework
         {
             return m_AssetModule.LoadAssetAsync<T>(location, packageName);
         }
+
+        public UniTask<GameObject> InstantiateGameObject(string location, Transform parent = null, string packageName = "")
+        {
+            return m_AssetModule.InstantiateGameObjectAsync(location, parent, packageName);
+        }
     }
 }
