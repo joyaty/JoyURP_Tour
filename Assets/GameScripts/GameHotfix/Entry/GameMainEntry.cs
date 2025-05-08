@@ -1,4 +1,5 @@
 
+using Cysharp.Threading.Tasks;
 using GameFramework.Procedure;
 using Joy.Base.Procedure;
 using UnityEngine;
@@ -21,6 +22,12 @@ namespace Joy.Hotfix.Entry
 
         private void Start()
         {
+            DoRestartProcedures().Forget();
+        }
+
+        private async UniTaskVoid DoRestartProcedures()
+        {
+            await UniTask.Yield();
             ProcedureComponent procedureComponent = GameEntry.GetComponent<ProcedureComponent>();
             procedureComponent.ResetProcedures(m_HotfixProcedures);
             procedureComponent.StartProcedure<ProcedureGameStart>();
