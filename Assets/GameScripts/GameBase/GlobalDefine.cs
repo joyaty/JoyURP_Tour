@@ -25,7 +25,7 @@ namespace Joy.Base.Define
         ASSET_DOWNLOAD_BEGIN = 4,       // 资源下载开始
         ASSET_DOWNLOAD_OVER = 5,        // 资源下载结束
         ASSET_CLEANUP = 6,              // 资源清理
-
+        ASSET_DLL_LOAD = 7,             // 加载热更Dll
         ALL_END = 10,                   // 热更新流程结束
     }
 }

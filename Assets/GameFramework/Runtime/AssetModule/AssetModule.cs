@@ -1,4 +1,6 @@
 
+using System;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -98,6 +100,34 @@ namespace GameFramework.Resource
             UpdatePackageManifestOperation updatePackageManifestOperation = package.UpdatePackageManifestAsync(versionCode);
             await updatePackageManifestOperation.ToUniTask();
             return updatePackageManifestOperation;
+        }
+
+        public async UniTask<ClearCacheFilesOperation> ClearCacheFile(EFileClearMode clearMode, string packageName)
+        {
+            ResourcePackage package = GetPackage(packageName);
+            ClearCacheFilesOperation clearCacheFilesOperation = package.ClearCacheFilesAsync(clearMode);
+            await clearCacheFilesOperation.ToUniTask();
+            return clearCacheFilesOperation;
+        }
+
+        public async UniTask<ResourceDownloaderOperation> StartDownload(Action<int, int, long, long> onDownloadProgress, string packageName = "")
+        {
+            ResourcePackage package = GetPackage(packageName);
+            // 创建资源下载器
+            ResourceDownloaderOperation downloaderOperation = package.CreateResourceDownloader(5, 3);
+            if (downloaderOperation.TotalDownloadCount <= 0)
+            { // 没有需要下载的游戏资源
+                return downloaderOperation;
+            }
+            // 注册资源下载进度回调
+            downloaderOperation.DownloadUpdateCallback = (DownloadUpdateData data) =>
+            {
+                onDownloadProgress?.Invoke(data.CurrentDownloadCount, data.TotalDownloadCount, data.CurrentDownloadBytes, data.TotalDownloadBytes);
+            };
+            // 开始下载
+            downloaderOperation.BeginDownload();
+            await downloaderOperation.ToUniTask();
+            return downloaderOperation;
         }
 
         public ResourcePackage GetPackage(string packageName = "")

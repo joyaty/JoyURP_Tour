@@ -49,6 +49,22 @@ namespace GameFramework.Resource
         UniTask<UpdatePackageManifestOperation> UpdatePackageManifest(string versionCode, string packageName = "");
 
         /// <summary>
+        /// 下载资源
+        /// </summary>
+        /// <param name="onDownloadProgress"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        UniTask<ResourceDownloaderOperation> StartDownload(System.Action<int, int, long, long> onDownloadProgress, string packageName = "");
+
+        /// <summary>
+        /// 移除资源
+        /// </summary>
+        /// <param name="clearMode"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        UniTask<ClearCacheFilesOperation> ClearCacheFile(EFileClearMode clearMode, string packageName);
+
+        /// <summary>
         /// 获取资源包
         /// </summary>
         /// <param name="packageName">资源包名称，空为默认资源包</param>

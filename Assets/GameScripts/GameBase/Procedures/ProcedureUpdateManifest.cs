@@ -35,14 +35,12 @@ namespace Joy.Base.Procedure
                 await UniTask.Delay(500);
                 if (resComponent.WorkingMode == GameFramework.Resource.EnumAssetWorkingMode.HostMode)
                 { // 可能需要远程更新游戏资源，进入热更新流程
-
+                    ChangeState<ProcedureDownload>(procedureOwner);
                 }
                 else
                 { // 资源准备完成，进入游戏开始流程
-                    eventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(EnumHotfixKeyPoint.ALL_END));
                     await UniTask.Delay(200);
                     ChangeState<ProcedureHotfixDLL>(procedureOwner);
-                    // LogUtil.Debug("TODO 加载热更脚本，启动游戏内容。");
                 }
             }
             else

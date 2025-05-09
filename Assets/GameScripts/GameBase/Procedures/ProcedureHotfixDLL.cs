@@ -6,6 +6,7 @@ using GameFramework.Fsm;
 using GameFramework.Procedure;
 using HybridCLR;
 using Joy.Base.Config;
+using Joy.Base.Event;
 using UnityEngine;
 using UnityGameFramework;
 using UnityGameFramework.Runtime;
@@ -29,11 +30,24 @@ namespace Joy.Base.Procedure
         /// </summary>
         private AssetComponent m_AssetComponent = null;
 
+        /// <summary>
+        /// 事件管理组件
+        /// </summary>
+        private EventComponent m_EventComponent = null;
+
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             m_AssetComponent = GameEntry.GetComponent<AssetComponent>();
+            m_EventComponent = GameEntry.GetComponent<EventComponent>();
             // 打包运行，使用热更新dll资源
+#if UNITY_EDITOR
+            // 编辑器模式，无需加载可热更Assembly，可直接初始化
+            RunHotfixEntry().Forget();
+#else
+            // 打包运行，需要加载热更资源中的可热更Dll，在执行热更新的入口
+            m_EventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(Define.EnumHotfixKeyPoint.ASSET_DLL_LOAD));
             LoadDll().Forget();
+#endif
         }
 
         /// <summary>
@@ -104,10 +118,9 @@ namespace Joy.Base.Procedure
         /// <returns></returns>
         private async UniTaskVoid RunHotfixEntry()
         {
+            // 加载热更新代码入口Prefab，进入热更的游戏内容流程
             await m_AssetComponent.InstantiateGameObject(HOTFIX_ENTRY_LOCATION);
-            // GameObject hotfixEntryPrefab = await m_AssetComponent.LoadAssetAsync<GameObject>(HOTFIX_ENTRY_LOCATION);
-            // TODO 挂载热更新代码入口到当前场景上
-            // m_AssetComponent.InitializeObject(hotfixEntryPrefab);
+            m_EventComponent.FireNow(this, EventHotfixProcessSyncArgs.Create(Define.EnumHotfixKeyPoint.ALL_END));
         }
     }
 }

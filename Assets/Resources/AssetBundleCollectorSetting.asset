@@ -50,19 +50,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Models
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/GameRes/Models
-        CollectorGUID: f3197c1135e67411d8ef89139c1b8411
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: AOTDlls
       GroupDesc: "\u8865\u5145AOT\u5143\u6570\u636EDll"
       AssetTags: 
@@ -109,6 +96,82 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/GameRes/Prefabs
         CollectorGUID: d88d1083a16511a489b687baf0ca5a07
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: JoyURPAsset
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/JoyURPAssets/Materials
+        CollectorGUID: 3a970a9bbc2a64d99b569fa8307f2245
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/JoyURPAssets/Prefabs
+        CollectorGUID: 08d7b6488ed2b4214a72abb962f989b3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/JoyURPAssets/Shaders
+        CollectorGUID: 6f95739e00bb44012856a407fd2c4aa0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackShader
+        FilterRuleName: CollectShader
+        AssetTags: 
+        UserData: 
+    - GroupName: NativeURPAsset
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/NativeURPAssets/Materials
+        CollectorGUID: 306c5b294b9a44ff7bab180ebd7c15a8
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/NativeURPAssets/Prefabs
+        CollectorGUID: d501eea31979d4e68ac87dccbc4f02a5
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Models
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Models
+        CollectorGUID: f3197c1135e67411d8ef89139c1b8411
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Textures
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Textures
+        CollectorGUID: c2c9ba8b542ed456faa8f84af4e29efc
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

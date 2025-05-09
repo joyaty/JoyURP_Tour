@@ -6,7 +6,7 @@ using UnityGameFramework.Runtime;
 using Cysharp.Threading.Tasks;
 using YooAsset;
 using UnityEngine.SceneManagement;
-using dnlib.DotNet.Emit;
+using System;
 
 namespace UnityGameFramework
 {
@@ -83,7 +83,12 @@ namespace UnityGameFramework
             string[] remoteURLs = null;
             if (m_WorkingMode == EnumAssetWorkingMode.HostMode)
             {
-                remoteURLs = new string[] { m_RemoteMainURL, m_RemoteFallbackURL };
+                remoteURLs = new string[]
+                {
+                    m_RemoteMainURL + GetURLSuffix(Application.platform),
+                    m_RemoteFallbackURL + GetURLSuffix(Application.platform)
+                };
+                LogUtil.Debug("远程资源地址: {0}, {1}", remoteURLs[0], remoteURLs[1]);
             }
             InitializationOperation initializationOperation = await m_AssetModule.InitializePackage(name, m_WorkingMode, remoteURLs);
             return initializationOperation.Status == EOperationStatus.Succeed;
@@ -114,6 +119,33 @@ namespace UnityGameFramework
             return updatePackageManifestOperation.Status == EOperationStatus.Succeed;
         }
 
+        /// <summary>
+        /// 清理缓存资源
+        /// </summary>
+        /// <param name="cleanMode"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        public async UniTask<bool> ClearCacheFile(EnumResCleanMode cleanMode, string packageName = "")
+        {
+            string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
+            ClearCacheFilesOperation clearCacheFilesOperation = await m_AssetModule.ClearCacheFile(cleanMode.ToEFileClearMode(), name);
+            return clearCacheFilesOperation.Status == EOperationStatus.Succeed;
+        }
+
+        /// <summary>
+        /// 启动下载远端资源
+        /// </summary>
+        /// <param name="onDownloadProgress"></param>
+        /// <param name="packageName"></param>
+        /// <returns></returns>
+        public async UniTask<bool> StartDownloadResource(Action<int, int, long, long> onDownloadProgress, string packageName = "")
+        {
+            string name = string.IsNullOrEmpty(packageName) ? packageName : m_DefaultPackageName;
+            ResourceDownloaderOperation downloaderOperation = await m_AssetModule.StartDownload(onDownloadProgress, name);
+            // 需要下载的资源数为空，或者资源下载是否成功
+            return downloaderOperation.TotalDownloadCount <= 0 || downloaderOperation.Status == EOperationStatus.Succeed;
+        }
+
         public Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
         {
             return m_AssetModule.LoadSceneSync(location, loadSceneMode, packageName);
@@ -137,6 +169,25 @@ namespace UnityGameFramework
         public UniTask<GameObject> InstantiateGameObject(string location, Transform parent = null, string packageName = "")
         {
             return m_AssetModule.InstantiateGameObjectAsync(location, parent, packageName);
+        }
+
+        /// <summary>
+        /// 根据平台类别，获取远程地址后缀
+        /// </summary>
+        /// <param name="ePlatform">平台枚举</param>
+        /// <returns></returns>
+        private static string GetURLSuffix(RuntimePlatform ePlatform)
+        {
+            return ePlatform switch
+            {
+                RuntimePlatform.Android => "/App/Android/v1.0/",
+                RuntimePlatform.WindowsPlayer => "/App/PC/v1.0/",
+                RuntimePlatform.WindowsEditor => "/App/PC/v1.0/",
+                RuntimePlatform.OSXEditor => "/App/OSX/v1.0/",
+                RuntimePlatform.OSXPlayer => "/App/OSX/v1.0/",
+                RuntimePlatform.IPhonePlayer => "/App/IOS/v1.0/",
+                _ => "/App/Unknow/v1.0/",
+            };
         }
     }
 }

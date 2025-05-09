@@ -46,4 +46,9 @@ public class RotaAnimation : MonoBehaviour
         float pitch = Random.Range(-180f, 180f) * Mathf.Deg2Rad * scaleValue;
         m_AnimationDir = new Vector3(roll, yaw, pitch);
     }
+
+    private void OnGUI()
+    {
+        GUILayout.Label("这是热更新测试输出，热更新修改一次！");
+    }
 }
