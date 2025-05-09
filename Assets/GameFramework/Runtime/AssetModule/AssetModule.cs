@@ -201,6 +201,14 @@ namespace GameFramework.Resource
             return sceneHandle.SceneObject;
         }
 
+        public async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
+        {
+            ResourcePackage package = GetPackage(packageName);
+            SceneHandle sceneHandle = package.LoadSceneAsync(location, loadSceneMode);
+            await sceneHandle.ToUniTask();
+            return sceneHandle.SceneObject;
+        }
+
         public T LoadAssetSync<T>(string location, string packageName = "") where T : UnityEngine.Object
         {
             ResourcePackage package = GetPackage(packageName);

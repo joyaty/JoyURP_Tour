@@ -119,6 +119,11 @@ namespace UnityGameFramework
             return m_AssetModule.LoadSceneSync(location, loadSceneMode, packageName);
         }
 
+        public UniTask<Scene> LoadSceneAsync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "")
+        {
+            return m_AssetModule.LoadSceneAsync(location, loadSceneMode, packageName);
+        }
+
         public T LoadAssetSync<T>(string location, string packageName = "") where T : UnityEngine.Object
         {
             return m_AssetModule.LoadAssetSync<T>(location, packageName);

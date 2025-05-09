@@ -58,9 +58,20 @@ namespace GameFramework.Resource
         /// <summary>
         /// 加载场景 - 同步方式
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="packageName"></param>
+        /// <param name="location">场景资源定位符</param>
+        /// <param name="loadSceneMode">场景加载模式</param>
+        /// <param name="packageName">资源包名，空 = 默认资源包</param>
+        /// <returns></returns>
         UnityEngine.SceneManagement.Scene LoadSceneSync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "");
+
+        /// <summary>
+        /// 加载场景 - 异步方式
+        /// </summary>
+        /// <param name="location">场景资源定位符</param>
+        /// <param name="loadSceneMode">场景加载模式</param>
+        /// <param name="packageName">资源包名，空 = 默认资源包</param>
+        /// <returns></returns>
+        UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string location, LoadSceneMode loadSceneMode = LoadSceneMode.Single, string packageName = "");
 
         /// <summary>
         /// 同步方式加载UnityEngine.Object资源
