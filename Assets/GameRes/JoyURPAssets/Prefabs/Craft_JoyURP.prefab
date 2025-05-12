@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8761270253263740879}
   - component: {fileID: 8408920008186514678}
   m_Layer: 0
-  m_Name: Craft
+  m_Name: Craft_JoyURP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

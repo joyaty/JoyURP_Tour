@@ -480,49 +480,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[0]
-      value: Joy.Base.Procedure.ProcedureDownload
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[1]
-      value: Joy.Base.Procedure.ProcedureHotfixDLL
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[2]
-      value: Joy.Base.Procedure.ProcedureInitPackage
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[3]
-      value: Joy.Base.Procedure.ProcedureRequestVersion
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[4]
-      value: Joy.Base.Procedure.ProcedureUnuseResClean
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[5]
-      value: Joy.Base.Procedure.ProcedureUpdateManifest
-      objectReference: {fileID: 0}
-    - target: {fileID: 7204346844294772132, guid: adb3eb1c35fcff14f89fba7b05c9d71c,
-        type: 3}
-      propertyPath: m_WorkingMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7204346844294772132, guid: adb3eb1c35fcff14f89fba7b05c9d71c,
-        type: 3}
-      propertyPath: m_RemoteMainURL
-      value: http://172.26.134.233:9081
-      objectReference: {fileID: 0}
-    - target: {fileID: 7204346844294772132, guid: adb3eb1c35fcff14f89fba7b05c9d71c,
-        type: 3}
-      propertyPath: m_RemoteFallbackURL
-      value: http://172.26.134.233:9081
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

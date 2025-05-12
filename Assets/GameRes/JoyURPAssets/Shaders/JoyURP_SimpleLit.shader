@@ -12,8 +12,8 @@ Shader "JoyURP/JoyURP_SimpleLit"
         _RampMap ("Ramp Map", 2D) = "bump" { }// 渐变纹理
         _EnableRampMap ("Enable Ramp Map", Float) = 0.0 // 启用渐变纹理
 
-        _AlphaTest("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
-        _ApphaThreshold("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
+        _AlphaTest ("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
+        _ApphaThreshold ("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
         // _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
 
@@ -115,7 +115,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
             {
                 half4 albedoMap = SAMPLE_TEXTURE2D(_DiffuseMap, sampler_DiffuseMap, input.uv);
                 #if _ENABLE_ALPHA_TEST
-                clip(albedoMap.a - _ApphaThreshold);
+                    clip(albedoMap.a - _ApphaThreshold);
                 #endif
                 Light mainLight = GetMainLight();
                 float3 l = normalize(mainLight.direction);

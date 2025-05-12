@@ -571,9 +571,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AvailableProcedureTypeNames:
-  - Joy.Base.Procedure.ProcedureGameStart
+  - Joy.Base.Procedure.ProcedureDownload
+  - Joy.Base.Procedure.ProcedureHotfixDLL
   - Joy.Base.Procedure.ProcedureInitPackage
   - Joy.Base.Procedure.ProcedureRequestVersion
+  - Joy.Base.Procedure.ProcedureUnuseResClean
   - Joy.Base.Procedure.ProcedureUpdateManifest
   m_EntranceProcedureTypeName: Joy.Base.Procedure.ProcedureInitPackage
 --- !u!1 &140694
@@ -1052,5 +1054,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_WorkingMode: 0
   m_DefaultPackageName: DefaultPackage
-  m_RemoteMainURL: http://192.168.31.104:9081
-  m_RemoteFallbackURL: http://192.168.31.104:9081
+  m_RemoteMainURL: http://172.26.134.233:9081
+  m_RemoteFallbackURL: http://172.26.134.233:9081
