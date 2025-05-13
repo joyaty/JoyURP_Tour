@@ -4,6 +4,8 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
+using UnityEditor.Rendering;
+using System;
 
 namespace Joy.ShaderEditor
 {
@@ -58,6 +60,16 @@ namespace Joy.ShaderEditor
             /// AlphaTest的临界值
             /// </summary>
             internal static readonly string ALPHA_TEST_THRESHOLD = "_ApphaThreshold";
+
+            /// <summary>
+            /// 表面类型
+            /// </summary>
+            internal static readonly string SURFACE_TYPE = "_Surface";
+
+            /// <summary>
+            /// 混合因子缩放
+            /// </summary>
+            internal static readonly string BLEND_SCALE = "_BlendFactorScale";
         }
 
         /// <summary>
@@ -119,6 +131,8 @@ namespace Joy.ShaderEditor
         private MaterialProperty m_EnableRampMapProp = null;
         private MaterialProperty m_EnableAlphaTestProp = null;
         private MaterialProperty m_AlphaTestThresholdProp = null;
+        private MaterialProperty m_SurfaceTypeProp = null;
+        private MaterialProperty m_BlendFactorScaleProp = null;
 
         /// <summary>
         /// 绑定Shader中声明的材质属性
@@ -135,6 +149,8 @@ namespace Joy.ShaderEditor
             m_EnableRampMapProp = FindProperty(JoySimpleLitPropDefine.ENABLE_RAMP_MAP, properties, false);
             m_EnableAlphaTestProp = FindProperty(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST, properties, false);
             m_AlphaTestThresholdProp = FindProperty(JoySimpleLitPropDefine.ALPHA_TEST_THRESHOLD, properties, false);
+            m_SurfaceTypeProp = FindProperty(JoySimpleLitPropDefine.SURFACE_TYPE, properties, false);
+            m_BlendFactorScaleProp = FindProperty(JoySimpleLitPropDefine.BLEND_SCALE, properties, false);
             base.FindProperties(properties);
         }
 
@@ -155,6 +171,12 @@ namespace Joy.ShaderEditor
                     ? (EnumRampMapOption)material.GetFloat(JoySimpleLitPropDefine.ENABLE_RAMP_MAP) : EnumRampMapOption.ENABLE;
                 CoreUtils.SetKeyword(material, "_ENABLE_RAMP_MAP", option == EnumRampMapOption.ENABLE);
             }
+            // 获取表面类型
+            SurfaceType surfaceType = SurfaceType.Opaque;
+            if (material.HasProperty(JoySimpleLitPropDefine.SURFACE_TYPE))
+            {
+                surfaceType = (SurfaceType)material.GetFloat(JoySimpleLitPropDefine.SURFACE_TYPE);
+            }
             if (material.HasProperty(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST))
             { // 是否开启AlphaTest
                 EnumAlphaTestOption option = (EnumAlphaTestOption)material.GetFloat(JoySimpleLitPropDefine.ENABLE_ALPHA_TEST);
@@ -162,11 +184,11 @@ namespace Joy.ShaderEditor
                 int renderQueue = material.shader.renderQueue; // 默认使用shader的渲染队列
                 if (option == EnumAlphaTestOption.ENABLE)
                 {
-                    renderQueue = (int)RenderQueue.AlphaTest;
+                    renderQueue = surfaceType == SurfaceType.Transparent ? (int)RenderQueue.Transparent : (int)RenderQueue.AlphaTest;
                 }
                 else if (option == EnumAlphaTestOption.DISABLE)
                 {
-                    renderQueue = (int)RenderQueue.Geometry;
+                    renderQueue = surfaceType == SurfaceType.Transparent ? (int)RenderQueue.Transparent : (int)RenderQueue.Geometry;
                 }
                 material.renderQueue = renderQueue;
             }
@@ -174,6 +196,18 @@ namespace Joy.ShaderEditor
 
         public override void DrawSurfaceOptions(Material material)
         {
+            if (m_SurfaceTypeProp != null)
+            {
+                materialEditor.PopupShaderProperty(m_SurfaceTypeProp, new GUIContent("Surface Type"), Enum.GetNames(typeof(SurfaceType)));
+                SurfaceType surfaceType = (SurfaceType)m_SurfaceTypeProp.floatValue;
+                if (surfaceType == SurfaceType.Transparent)
+                {
+                    EditorGUI.BeginDisabledGroup(surfaceType != SurfaceType.Transparent);
+                    materialEditor.RangeProperty(m_BlendFactorScaleProp, "Blend Factor Scale");
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
+
             if (m_EnableAlphaTestProp != null)
             {
                 EnumAlphaTestOption option = (EnumAlphaTestOption)m_EnableAlphaTestProp.floatValue;

@@ -12,9 +12,10 @@ Shader "JoyURP/JoyURP_SimpleLit"
         _RampMap ("Ramp Map", 2D) = "bump" { }// 渐变纹理
         _EnableRampMap ("Enable Ramp Map", Float) = 0.0 // 启用渐变纹理
 
+        _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
+        _BlendFactorScale ("Blend Scale", Range(0.0, 1.0)) = 1.0 // 混合因子的缩放值
         _AlphaTest ("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
         _ApphaThreshold ("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
-        // _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
 
     }
@@ -27,6 +28,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
         {
             Name "JoyUniversalForward"
             Tags { "LightMode" = "UniversalForward" }
+            Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM
             // 声明顶点着色器和像素着色器入库
@@ -60,6 +62,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 half4 _SpecColor;
                 float _Glossy;
                 float _ApphaThreshold;
+                float _BlendFactorScale;
             CBUFFER_END
             
             // 顶点属性(顶点着色器的输入)
@@ -148,7 +151,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 // 环境光项
                 float3 ambient = _GlossyEnvironmentColor.xyz * albedo.xyz;
                 // 合成最终颜色
-                half4 finalColor = half4(diffuse + ambient + specular, 1);
+                half4 finalColor = half4(diffuse + ambient + specular, albedoMap.a * _BlendFactorScale);
                 return finalColor;
             }
 
