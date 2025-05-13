@@ -70,6 +70,11 @@ namespace Joy.ShaderEditor
             /// 混合因子缩放
             /// </summary>
             internal static readonly string BLEND_SCALE = "_BlendFactorScale";
+
+            /// <summary>
+            /// 表面裁剪类型
+            /// </summary>
+            internal static readonly string CULL_TYPE = "_CullType";
         }
 
         /// <summary>
@@ -133,6 +138,7 @@ namespace Joy.ShaderEditor
         private MaterialProperty m_AlphaTestThresholdProp = null;
         private MaterialProperty m_SurfaceTypeProp = null;
         private MaterialProperty m_BlendFactorScaleProp = null;
+        private MaterialProperty m_CullProp = null;
 
         /// <summary>
         /// 绑定Shader中声明的材质属性
@@ -151,6 +157,7 @@ namespace Joy.ShaderEditor
             m_AlphaTestThresholdProp = FindProperty(JoySimpleLitPropDefine.ALPHA_TEST_THRESHOLD, properties, false);
             m_SurfaceTypeProp = FindProperty(JoySimpleLitPropDefine.SURFACE_TYPE, properties, false);
             m_BlendFactorScaleProp = FindProperty(JoySimpleLitPropDefine.BLEND_SCALE, properties, false);
+            m_CullProp = FindProperty(JoySimpleLitPropDefine.CULL_TYPE, properties, false);
             base.FindProperties(properties);
         }
 
@@ -206,6 +213,11 @@ namespace Joy.ShaderEditor
                     materialEditor.RangeProperty(m_BlendFactorScaleProp, "Blend Factor Scale");
                     EditorGUI.EndDisabledGroup();
                 }
+            }
+
+            if (m_CullProp != null)
+            {
+                materialEditor.PopupShaderProperty(m_CullProp, new GUIContent("Cull"), Enum.GetNames(typeof(RenderFace)));
             }
 
             if (m_EnableAlphaTestProp != null)

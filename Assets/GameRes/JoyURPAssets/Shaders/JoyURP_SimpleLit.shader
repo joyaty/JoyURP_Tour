@@ -14,6 +14,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
 
         _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _BlendFactorScale ("Blend Scale", Range(0.0, 1.0)) = 1.0 // 混合因子的缩放值
+        _CullType("Render Surface", Float) = 2.0 // 渲染的表面类型，Front|Back|Off
         _AlphaTest ("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
         _ApphaThreshold ("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
@@ -29,6 +30,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
             Name "JoyUniversalForward"
             Tags { "LightMode" = "UniversalForward" }
             Blend SrcAlpha OneMinusSrcAlpha
+            Cull [_CullType]
 
             HLSLPROGRAM
             // 声明顶点着色器和像素着色器入库
