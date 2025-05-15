@@ -63,6 +63,7 @@ float3 GetCameraPositionWS()
     //#else
     //    return _WorldSpaceCameraPos;
     //#endif
+
 }
 
 // Could be e.g. the position of a primary camera or a shadow-casting light.
@@ -82,6 +83,7 @@ float3 GetCurrentViewPosition()
     //    // and in case we enable camera-relative rendering, we can statically set the position is 0.
     //    return UNITY_MATRIX_I_V._14_24_34;
     //#endif
+
 }
 
 // Returns the forward (central) direction of the current view in the world space.
@@ -170,51 +172,51 @@ bool IsSurfaceTypeTransparent(half surfaceType)
 // Only define the alpha clipping helpers when the alpha test define is present.
 // This should help identify usage errors early.
 #if defined(_ALPHATEST_ON)
-// Returns true if AlphaToMask functionality is currently available
-// NOTE: This does NOT guarantee that AlphaToMask is enabled for the current draw. It only indicates that AlphaToMask functionality COULD be enabled for it.
-//       In cases where AlphaToMask COULD be enabled, we export a specialized alpha value from the shader.
-//       When AlphaToMask is enabled:     The specialized alpha value is combined with the sample mask
-//       When AlphaToMask is not enabled: The specialized alpha value is either written into the framebuffer or dropped entirely depending on the color write mask
-bool IsAlphaToMaskAvailable()
-{
-    return (_AlphaToMaskAvailable != 0.0);
-}
+    // Returns true if AlphaToMask functionality is currently available
+    // NOTE: This does NOT guarantee that AlphaToMask is enabled for the current draw. It only indicates that AlphaToMask functionality COULD be enabled for it.
+    //       In cases where AlphaToMask COULD be enabled, we export a specialized alpha value from the shader.
+    //       When AlphaToMask is enabled:     The specialized alpha value is combined with the sample mask
+    //       When AlphaToMask is not enabled: The specialized alpha value is either written into the framebuffer or dropped entirely depending on the color write mask
+    bool IsAlphaToMaskAvailable()
+    {
+        return (_AlphaToMaskAvailable != 0.0);
+    }
 
-// Returns a sharpened alpha value for use with alpha to coverage
-// This function behaves correctly in cases where alpha and cutoff are constant values (degenerate usage of alpha clipping)
-half SharpenAlphaStrict(half alpha, half alphaClipTreshold)
-{
-    half dAlpha = fwidth(alpha);
-    return saturate(((alpha - alphaClipTreshold - (0.5 * dAlpha)) / max(dAlpha, 0.0001)) + 1.0);
-}
+    // Returns a sharpened alpha value for use with alpha to coverage
+    // This function behaves correctly in cases where alpha and cutoff are constant values (degenerate usage of alpha clipping)
+    half SharpenAlphaStrict(half alpha, half alphaClipTreshold)
+    {
+        half dAlpha = fwidth(alpha);
+        return saturate(((alpha - alphaClipTreshold - (0.5 * dAlpha)) / max(dAlpha, 0.0001)) + 1.0);
+    }
 
-// When AlphaToMask is available:     Returns a modified alpha value that should be exported from the shader so it can be combined with the sample mask
-// When AlphaToMask is not available: Terminates the current invocation if the alpha value is below the cutoff and returns the input alpha value otherwise
-half AlphaClip(half alpha, half cutoff)
-{
-    bool a2c = IsAlphaToMaskAvailable();
+    // When AlphaToMask is available:     Returns a modified alpha value that should be exported from the shader so it can be combined with the sample mask
+    // When AlphaToMask is not available: Terminates the current invocation if the alpha value is below the cutoff and returns the input alpha value otherwise
+    half AlphaClip(half alpha, half cutoff)
+    {
+        bool a2c = IsAlphaToMaskAvailable();
 
-    // We explicitly detect cases where the alpha cutoff threshold is zero or below.
-    // When this case occurs, we need to modify the alpha to coverage logic to avoid visual artifacts.
-    bool zeroCutoff = (cutoff <= 0.0);
+        // We explicitly detect cases where the alpha cutoff threshold is zero or below.
+        // When this case occurs, we need to modify the alpha to coverage logic to avoid visual artifacts.
+        bool zeroCutoff = (cutoff <= 0.0);
 
-    // If the user has specified zero as the cutoff threshold, the expectation is that the shader will function as if alpha-clipping was disabled.
-    // Ideally, the user should just turn off the alpha-clipping feature in this case, but in order to make this case work as expected, we force alpha
-    // to 1.0 here to ensure that alpha-to-coverage never throws away samples when its active. (This would cause opaque objects to appear transparent)
-    half alphaToCoverageAlpha = zeroCutoff ? 1.0 : SharpenAlphaStrict(alpha, cutoff);
+        // If the user has specified zero as the cutoff threshold, the expectation is that the shader will function as if alpha-clipping was disabled.
+        // Ideally, the user should just turn off the alpha-clipping feature in this case, but in order to make this case work as expected, we force alpha
+        // to 1.0 here to ensure that alpha-to-coverage never throws away samples when its active. (This would cause opaque objects to appear transparent)
+        half alphaToCoverageAlpha = zeroCutoff ? 1.0 : SharpenAlphaStrict(alpha, cutoff);
 
-    // When the alpha to coverage alpha is used for clipping, we subtract a small value from it to ensure that pixels with zero alpha exit early
-    // rather than running the entire shader and then multiplying the sample coverage mask by zero which outputs nothing.
-    half clipVal = (a2c && !zeroCutoff) ? (alphaToCoverageAlpha - 0.0001) : (alpha - cutoff);
+        // When the alpha to coverage alpha is used for clipping, we subtract a small value from it to ensure that pixels with zero alpha exit early
+        // rather than running the entire shader and then multiplying the sample coverage mask by zero which outputs nothing.
+        half clipVal = (a2c && !zeroCutoff) ? (alphaToCoverageAlpha - 0.0001) : (alpha - cutoff);
 
-    // When alpha-to-coverage is available:     Use the specialized value which will be exported from the shader and combined with the MSAA coverage mask.
-    // When alpha-to-coverage is not available: Use the "clipped" value. A clipped value will always result in thread termination via the clip() logic below.
-    half outputAlpha = a2c ? alphaToCoverageAlpha : alpha;
+        // When alpha-to-coverage is available:     Use the specialized value which will be exported from the shader and combined with the MSAA coverage mask.
+        // When alpha-to-coverage is not available: Use the "clipped" value. A clipped value will always result in thread termination via the clip() logic below.
+        half outputAlpha = a2c ? alphaToCoverageAlpha : alpha;
 
-    clip(clipVal);
+        clip(clipVal);
 
-    return outputAlpha;
-}
+        return outputAlpha;
+    }
 #endif
 
 // Terminates the current invocation if the input alpha value is below the specified cutoff value and returns an updated alpha value otherwise.
@@ -227,10 +229,10 @@ half AlphaClip(half alpha, half cutoff)
 // NOTE: When _ALPHATEST_ON is not defined, this function is effectively a no-op.
 real AlphaDiscard(real alpha, real cutoff, real offset = real(0.0))
 {
-#if defined(_ALPHATEST_ON)
-    if (IsAlphaDiscardEnabled())
-        alpha = AlphaClip(alpha, cutoff + offset);
-#endif
+    #if defined(_ALPHATEST_ON)
+        if (IsAlphaDiscardEnabled())
+            alpha = AlphaClip(alpha, cutoff + offset);
+    #endif
 
     return alpha;
 }
@@ -243,12 +245,12 @@ half OutputAlpha(half alpha, bool isTransparent)
     }
     else
     {
-#if defined(_ALPHATEST_ON)
-        // Opaque materials should always export an alpha value of 1.0 unless alpha-to-coverage is available
-        return IsAlphaToMaskAvailable() ? alpha : 1.0;
-#else
-        return 1.0;
-#endif
+        #if defined(_ALPHATEST_ON)
+            // Opaque materials should always export an alpha value of 1.0 unless alpha-to-coverage is available
+            return IsAlphaToMaskAvailable() ? alpha : 1.0;
+        #else
+            return 1.0;
+        #endif
     }
 }
 
@@ -258,11 +260,11 @@ half3 AlphaModulate(half3 albedo, half alpha)
     // Manual adjustment for "lighter" multiply effect (similar to "premultiplied alpha")
     // would be painting whiter pixels in the texture.
     // This emulates that procedure in shader, so it should be applied to the base/source color.
-#if defined(_ALPHAMODULATE_ON)
-    return lerp(half3(1.0, 1.0, 1.0), albedo, alpha);
-#else
-    return albedo;
-#endif
+    #if defined(_ALPHAMODULATE_ON)
+        return lerp(half3(1.0, 1.0, 1.0), albedo, alpha);
+    #else
+        return albedo;
+    #endif
 }
 
 half3 AlphaPremultiply(half3 albedo, half alpha)
@@ -271,9 +273,9 @@ half3 AlphaPremultiply(half3 albedo, half alpha)
     // Preserve Specular material (glass like) has different alpha for diffuse and specular lighting.
     // Logically this is "variable" Alpha blending.
     // (HW blend mode is premultiply, but with alpha multiply in shader.)
-#if defined(_ALPHAPREMULTIPLY_ON)
-    return albedo * alpha;
-#endif
+    #if defined(_ALPHAPREMULTIPLY_ON)
+        return albedo * alpha;
+    #endif
     return albedo;
 }
 
@@ -292,21 +294,21 @@ float3 NormalizeNormalPerVertex(float3 normalWS)
 
 half3 NormalizeNormalPerPixel(half3 normalWS)
 {
-// With XYZ normal map encoding we sporadically sample normals with near-zero-length causing Inf/NaN
-#if defined(UNITY_NO_DXT5nm) && defined(_NORMALMAP)
-    return SafeNormalize(normalWS);
-#else
-    return normalize(normalWS);
-#endif
+    // With XYZ normal map encoding we sporadically sample normals with near-zero-length causing Inf/NaN
+    #if defined(UNITY_NO_DXT5nm) && defined(_NORMALMAP)
+        return SafeNormalize(normalWS);
+    #else
+        return normalize(normalWS);
+    #endif
 }
 
 float3 NormalizeNormalPerPixel(float3 normalWS)
 {
-#if defined(UNITY_NO_DXT5nm) && defined(_NORMALMAP)
-    return SafeNormalize(normalWS);
-#else
-    return normalize(normalWS);
-#endif
+    #if defined(UNITY_NO_DXT5nm) && defined(_NORMALMAP)
+        return SafeNormalize(normalWS);
+    #else
+        return normalize(normalWS);
+    #endif
 }
 
 
@@ -314,13 +316,13 @@ float3 NormalizeNormalPerPixel(float3 normalWS)
 real ComputeFogFactorZ0ToFar(float z)
 {
     #if defined(FOG_LINEAR)
-    // factor = (end-z)/(end-start) = z * (-1/(end-start)) + (end/(end-start))
-    float fogFactor = saturate(z * unity_FogParams.z + unity_FogParams.w);
-    return real(fogFactor);
+        // factor = (end-z)/(end-start) = z * (-1/(end-start)) + (end/(end-start))
+        float fogFactor = saturate(z * unity_FogParams.z + unity_FogParams.w);
+        return real(fogFactor);
     #elif defined(FOG_EXP) || defined(FOG_EXP2)
-    // factor = exp(-(density*z)^2)
-    // -density * z computed at vertex
-    return real(unity_FogParams.x * z);
+        // factor = exp(-(density*z)^2)
+        // -density * z computed at vertex
+        return real(unity_FogParams.x * z);
     #else
         return real(0.0);
     #endif
@@ -356,17 +358,17 @@ half ComputeFogIntensity(half fogFactor)
 real InitializeInputDataFog(float4 positionWS, real vertFogFactor)
 {
     real fogFactor = 0.0;
-#if defined(_FOG_FRAGMENT)
-    #if (defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2))
-        // Compiler eliminates unused math --> matrix.column_z * vec
-        float viewZ = -(mul(UNITY_MATRIX_V, positionWS).z);
-        // View Z is 0 at camera pos, remap 0 to near plane.
-        float nearToFarZ = max(viewZ - _ProjectionParams.y, 0);
-        fogFactor = ComputeFogFactorZ0ToFar(nearToFarZ);
+    #if defined(_FOG_FRAGMENT)
+        #if (defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2))
+            // Compiler eliminates unused math --> matrix.column_z * vec
+            float viewZ = - (mul(UNITY_MATRIX_V, positionWS).z);
+            // View Z is 0 at camera pos, remap 0 to near plane.
+            float nearToFarZ = max(viewZ - _ProjectionParams.y, 0);
+            fogFactor = ComputeFogFactorZ0ToFar(nearToFarZ);
+        #endif
+    #else
+        fogFactor = vertFogFactor;
     #endif
-#else
-    fogFactor = vertFogFactor;
-#endif
     return fogFactor;
 }
 
@@ -402,11 +404,11 @@ half3 MixFogColor(half3 fragColor, half3 fogColor, half fogFactor)
 float3 MixFogColor(float3 fragColor, float3 fogColor, float fogFactor)
 {
     #if defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2)
-    if (IsFogEnabled())
-    {
-        float fogIntensity = ComputeFogIntensity(fogFactor);
-        fragColor = lerp(fogColor, fragColor, fogIntensity);
-    }
+        if (IsFogEnabled())
+        {
+            float fogIntensity = ComputeFogIntensity(fogFactor);
+            fragColor = lerp(fogColor, fragColor, fogIntensity);
+        }
     #endif
     return fragColor;
 }
@@ -443,21 +445,21 @@ float LinearDepthToEyeDepth(float rawDepth)
 void TransformScreenUV(inout float2 uv, float screenHeight)
 {
     #if UNITY_UV_STARTS_AT_TOP
-    uv.y = screenHeight - (uv.y * _ScaleBiasRt.x + _ScaleBiasRt.y * screenHeight);
+        uv.y = screenHeight - (uv.y * _ScaleBiasRt.x + _ScaleBiasRt.y * screenHeight);
     #endif
 }
 
 void TransformScreenUV(inout float2 uv)
 {
     #if UNITY_UV_STARTS_AT_TOP
-    TransformScreenUV(uv, GetScaledScreenParams().y);
+        TransformScreenUV(uv, GetScaledScreenParams().y);
     #endif
 }
 
 void TransformNormalizedScreenUV(inout float2 uv)
 {
     #if UNITY_UV_STARTS_AT_TOP
-    TransformScreenUV(uv, 1.0);
+        TransformScreenUV(uv, 1.0);
     #endif
 }
 
@@ -488,19 +490,19 @@ uint Select4(uint4 v, uint i)
     uint mask0 = uint(int(i << 31) >> 31);
     uint mask1 = uint(int(i << 30) >> 31);
     return
-        (((v.w & mask0) | (v.z & ~mask0)) & mask1) |
-        (((v.y & mask0) | (v.x & ~mask0)) & ~mask1);
+    (((v.w & mask0) | (v.z & ~mask0)) & mask1) |
+    (((v.y & mask0) | (v.x & ~mask0)) & ~mask1);
 }
 
 #if SHADER_TARGET < 45
-uint URP_FirstBitLow(uint m)
-{
-    // http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightFloatCast
-    return (asuint((float)(m & asuint(-asint(m)))) >> 23) - 0x7F;
-}
-#define FIRST_BIT_LOW URP_FirstBitLow
+    uint URP_FirstBitLow(uint m)
+    {
+        // http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightFloatCast
+        return (asuint((float) (m & asuint(-asint(m)))) >> 23) - 0x7F;
+    }
+    #define FIRST_BIT_LOW URP_FirstBitLow
 #else
-#define FIRST_BIT_LOW firstbitlow
+    #define FIRST_BIT_LOW firstbitlow
 #endif
 
 #if defined(UNITY_SINGLE_PASS_STEREO)
@@ -544,7 +546,8 @@ uint DecodeMeshRenderingLayer(float renderingLayer)
     // - Pre-computed maxInt
     // - Parameter f is float instead of real
     uint maxInt = _RenderingLayerMaxInt;
-    return (uint)(renderingLayer * maxInt + 0.5); // Round instead of truncating
+    return (uint) (renderingLayer * maxInt + 0.5); // Round instead of truncating
+
 }
 
 #endif // UNITY_SHADER_VARIABLES_FUNCTIONS_INCLUDED

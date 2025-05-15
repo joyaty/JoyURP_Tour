@@ -456,9 +456,9 @@ namespace UnityEngine.Rendering.Universal
 
         // ShEvalMode.Auto is handled in shader preprocessor.
 #if UNITY_EDITOR // multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
-        [ShaderKeywordFilter.RemoveIf(ShEvalMode.PerPixel,  keywordNames:  new [] { ShaderKeywordStrings.EVALUATE_SH_MIXED, ShaderKeywordStrings.EVALUATE_SH_VERTEX })]
-        [ShaderKeywordFilter.SelectIf(ShEvalMode.Mixed,     keywordNames:  new [] { ShaderKeywordStrings.EVALUATE_SH_MIXED })]
-        [ShaderKeywordFilter.SelectIf(ShEvalMode.PerVertex, keywordNames: new [] { ShaderKeywordStrings.EVALUATE_SH_VERTEX })]
+        [ShaderKeywordFilter.RemoveIf(ShEvalMode.PerPixel, keywordNames: new[] { ShaderKeywordStrings.EVALUATE_SH_MIXED, ShaderKeywordStrings.EVALUATE_SH_VERTEX })]
+        [ShaderKeywordFilter.SelectIf(ShEvalMode.Mixed, keywordNames: new[] { ShaderKeywordStrings.EVALUATE_SH_MIXED })]
+        [ShaderKeywordFilter.SelectIf(ShEvalMode.PerVertex, keywordNames: new[] { ShaderKeywordStrings.EVALUATE_SH_VERTEX })]
 #endif
         [SerializeField] ShEvalMode m_ShEvalMode = ShEvalMode.Auto;
 
@@ -533,7 +533,7 @@ namespace UnityEngine.Rendering.Universal
         [ShaderKeywordFilter.SelectOrRemove(true, keywordNames: ShaderKeywordStrings.LightLayers)]
 #endif
         [SerializeField] bool m_SupportsLightLayers = false;
-        [SerializeField] [Obsolete] PipelineDebugLevel m_DebugLevel;
+        [SerializeField][Obsolete] PipelineDebugLevel m_DebugLevel;
         [SerializeField] StoreActionsOptimization m_StoreActionsOptimization = StoreActionsOptimization.Auto;
         [SerializeField] bool m_EnableRenderGraph = false;
 
@@ -591,7 +591,7 @@ namespace UnityEngine.Rendering.Universal
         /// The default value of `additionalLightsShadowResolutionTierHigh`.
         /// </summary>
         public static readonly int AdditionalLightsDefaultShadowResolutionTierHigh = 1024;
-        
+
         /// <summary>
         /// The list of renderers used by this pipeline asset.
         /// </summary>
@@ -661,19 +661,19 @@ namespace UnityEngine.Rendering.Universal
             {
                 case RendererType.UniversalRenderer:
                 default:
-                {
-                    var rendererData = CreateInstance<UniversalRendererData>();
-                    rendererData.postProcessData = PostProcessData.GetDefaultPostProcessData();
-                    return rendererData;
-                }
+                    {
+                        var rendererData = CreateInstance<UniversalRendererData>();
+                        rendererData.postProcessData = PostProcessData.GetDefaultPostProcessData();
+                        return rendererData;
+                    }
                 // 2D renderer is experimental
                 case RendererType._2DRenderer:
-                {
-                    var rendererData = CreateInstance<Renderer2DData>();
-                    rendererData.postProcessData = PostProcessData.GetDefaultPostProcessData();
-                    return rendererData;
-                    // Universal Renderer is the fallback renderer that works on all platforms
-                }
+                    {
+                        var rendererData = CreateInstance<Renderer2DData>();
+                        rendererData.postProcessData = PostProcessData.GetDefaultPostProcessData();
+                        return rendererData;
+                        // Universal Renderer is the fallback renderer that works on all platforms
+                    }
             }
         }
 
@@ -972,7 +972,7 @@ namespace UnityEngine.Rendering.Universal
                 if (result == GraphicsFormat.None)
                 {
                     result = GraphicsFormat.R8G8B8A8_UNorm;
-                    Debug.LogWarning($"Additional Lights Cookie Format ({ m_AdditionalLightsCookieFormat.ToString() }) is not supported by the platform. Falling back to {GraphicsFormatUtility.GetBlockSize(result) * 8}-bit format ({GraphicsFormatUtility.GetFormatString(result)})");
+                    Debug.LogWarning($"Additional Lights Cookie Format ({m_AdditionalLightsCookieFormat.ToString()}) is not supported by the platform. Falling back to {GraphicsFormatUtility.GetBlockSize(result) * 8}-bit format ({GraphicsFormatUtility.GetFormatString(result)})");
                 }
 
                 return result;
@@ -1151,7 +1151,8 @@ namespace UnityEngine.Rendering.Universal
         public bool supportsMainLightShadows
         {
             get { return m_MainLightShadowsSupported; }
-            internal set {
+            internal set
+            {
                 m_MainLightShadowsSupported = value;
 #if UNITY_EDITOR
                 m_AnyShadowsSupported = m_MainLightShadowsSupported || m_AdditionalLightShadowsSupported;
@@ -1193,7 +1194,8 @@ namespace UnityEngine.Rendering.Universal
         public bool supportsAdditionalLightShadows
         {
             get { return m_AdditionalLightShadowsSupported; }
-            internal set {
+            internal set
+            {
                 m_AdditionalLightShadowsSupported = value;
 #if UNITY_EDITOR
                 m_AnyShadowsSupported = m_MainLightShadowsSupported || m_AdditionalLightShadowsSupported;
@@ -1624,7 +1626,7 @@ namespace UnityEngine.Rendering.Universal
                 if (m_DefaultShader == null)
                 {
                     string path = AssetDatabase.GUIDToAssetPath(ShaderUtils.GetShaderGUID(ShaderPathID.Lit));
-                    m_DefaultShader  = AssetDatabase.LoadAssetAtPath<Shader>(path);
+                    m_DefaultShader = AssetDatabase.LoadAssetAtPath<Shader>(path);
                 }
 #endif
 
@@ -1912,11 +1914,11 @@ namespace UnityEngine.Rendering.Universal
 
             if (asset.k_AssetPreviousVersion < 10)
             {
-                UniversalRenderPipelineGlobalSettings.Ensure().shaderVariantLogLevel = (Rendering.ShaderVariantLogLevel) asset.m_ShaderVariantLogLevel;
+                UniversalRenderPipelineGlobalSettings.Ensure().shaderVariantLogLevel = (Rendering.ShaderVariantLogLevel)asset.m_ShaderVariantLogLevel;
                 asset.k_AssetPreviousVersion = 10;
             }
 
-            if(asset.k_AssetPreviousVersion < 11)
+            if (asset.k_AssetPreviousVersion < 11)
             {
                 ResourceReloader.ReloadAllNullIn(asset, packagePath);
                 asset.k_AssetPreviousVersion = 11;

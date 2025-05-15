@@ -40,13 +40,13 @@ namespace UnityEngine.Rendering.Universal
     public sealed partial class UniversalRenderer : ScriptableRenderer
     {
         // Don't use 24 bit format in the editor, because it leads to unnecessary depth buffer re-allocations
-        #if (UNITY_SWITCH || UNITY_ANDROID) && !UNITY_EDITOR
+#if (UNITY_SWITCH || UNITY_ANDROID) && !UNITY_EDITOR
         const GraphicsFormat k_DepthStencilFormat = GraphicsFormat.D24_UNorm_S8_UInt;
         const int k_DepthBufferBits = 24;
-        #else
+#else
         const GraphicsFormat k_DepthStencilFormat = GraphicsFormat.D32_SFloat_S8_UInt;
         const int k_DepthBufferBits = 32;
-        #endif
+#endif
 
         const int k_FinalBlitPassQueueOffset = 1;
         const int k_AfterFinalBlitPassQueueOffset = k_FinalBlitPassQueueOffset + 1;
@@ -441,29 +441,29 @@ namespace UnityEngine.Rendering.Universal
                     switch (fullScreenDebugMode)
                     {
                         case DebugFullScreenMode.Depth:
-                        {
-                            DebugHandler.SetDebugRenderTarget(m_DepthTexture.nameID, normalizedRect, true);
-                            break;
-                        }
+                            {
+                                DebugHandler.SetDebugRenderTarget(m_DepthTexture.nameID, normalizedRect, true);
+                                break;
+                            }
                         case DebugFullScreenMode.AdditionalLightsShadowMap:
-                        {
-                            DebugHandler.SetDebugRenderTarget(m_AdditionalLightsShadowCasterPass.m_AdditionalLightsShadowmapHandle, normalizedRect, false);
-                            break;
-                        }
+                            {
+                                DebugHandler.SetDebugRenderTarget(m_AdditionalLightsShadowCasterPass.m_AdditionalLightsShadowmapHandle, normalizedRect, false);
+                                break;
+                            }
                         case DebugFullScreenMode.MainLightShadowMap:
-                        {
-                            DebugHandler.SetDebugRenderTarget(m_MainLightShadowCasterPass.m_MainLightShadowmapTexture, normalizedRect, false);
-                            break;
-                        }
+                            {
+                                DebugHandler.SetDebugRenderTarget(m_MainLightShadowCasterPass.m_MainLightShadowmapTexture, normalizedRect, false);
+                                break;
+                            }
                         case DebugFullScreenMode.ReflectionProbeAtlas:
-                        {
-                            DebugHandler.SetDebugRenderTarget(m_ForwardLights.reflectionProbeManager.atlasRT, normalizedRect, false);
-                            break;
-                        }
+                            {
+                                DebugHandler.SetDebugRenderTarget(m_ForwardLights.reflectionProbeManager.atlasRT, normalizedRect, false);
+                                break;
+                            }
                         default:
-                        {
-                            break;
-                        }
+                            {
+                                break;
+                            }
                     }
                 }
                 else
@@ -812,7 +812,7 @@ namespace UnityEngine.Rendering.Universal
                     CreateCameraRenderTarget(context, ref cameraTargetDescriptor, useDepthPriming, cmd, ref cameraData);
                     if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D11)
                         cmd.CopyTexture(m_CameraDepthAttachment, m_CameraDepthAttachment_D3d_11);
-                }    
+                }
 
                 m_RenderOpaqueForwardPass.m_IsActiveTargetBackBuffer = !intermediateRenderTexture;
                 m_RenderTransparentForwardPass.m_IsActiveTargetBackBuffer = !intermediateRenderTexture;
@@ -1134,7 +1134,7 @@ namespace UnityEngine.Rendering.Universal
                 // XRTODO: investigate DX XR clear issues.
                 if (SystemInfo.usesLoadStoreActions)
 #endif
-                renderOpaqueForwardPass.ConfigureClear(opaqueForwardPassClearFlag, Color.black);
+                    renderOpaqueForwardPass.ConfigureClear(opaqueForwardPassClearFlag, Color.black);
 
                 EnqueuePass(renderOpaqueForwardPass);
             }

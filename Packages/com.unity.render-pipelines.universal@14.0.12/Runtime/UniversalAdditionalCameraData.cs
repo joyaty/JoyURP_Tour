@@ -340,7 +340,7 @@ namespace UnityEngine.Rendering.Universal
         [FormerlySerializedAs("requiresColorTexture"), SerializeField]
         bool m_RequiresColorTexture = false;
 
-        [HideInInspector] [SerializeField] float m_Version = 2;
+        [HideInInspector][SerializeField] float m_Version = 2;
 
         // These persist over multiple frames
         [NonSerialized] MotionVectorsPersistentData m_MotionVectorsPersistentData = new MotionVectorsPersistentData();
@@ -749,7 +749,7 @@ namespace UnityEngine.Rendering.Universal
             get => m_ScreenCoordScaleBias;
             set => m_ScreenCoordScaleBias = value;
         }
-        
+
         /// <summary>
         /// Returns true if this camera allows outputting to HDR displays.
         /// </summary>
@@ -821,7 +821,7 @@ namespace UnityEngine.Rendering.Universal
             //You cannot call scriptableRenderer here. If you where not in URP, this will actually create the renderer.
             //This can occurs in cross pipeline but also on Dedicated Server where the gfx device do not run. (UUM-75237)
             //Use GetRawRenderer() instead.
-            
+
             m_Camera.DestroyVolumeStack(this);
             if (camera.cameraType != CameraType.SceneView)
                 GetRawRenderer()?.ReleaseRenderTargets();
