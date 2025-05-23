@@ -14,12 +14,13 @@ Shader "JoyURP/JoyURP_SimpleLit"
 
         _Surface ("Surface Type", Float) = 1.0 // 表面类型，Opaque或者Transparent
         _BlendFactorScale ("Blend Scale", Range(0.0, 1.0)) = 1.0 // 混合因子的缩放值
-        _CullType("Render Surface", Float) = 2.0 // 渲染的表面类型，Front|Back|Off
+        _CullType ("Render Surface", Float) = 2.0 // 渲染的表面类型，Front|Back|Off
         _AlphaTest ("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
         _ApphaThreshold ("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
 
     }
+    
     SubShader
     {
         Tags { "RenderPipeline" = "UniversalPipeline" }
@@ -27,6 +28,7 @@ Shader "JoyURP/JoyURP_SimpleLit"
 
         Pass
         {
+            // 前向渲染Pass
             Name "JoyUniversalForward"
             Tags { "LightMode" = "UniversalForward" }
             Blend SrcAlpha OneMinusSrcAlpha
@@ -155,6 +157,47 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 // 合成最终颜色
                 half4 finalColor = half4(diffuse + ambient + specular, albedoMap.a * _BlendFactorScale);
                 return finalColor;
+            }
+
+            ENDHLSL
+        }
+
+        Pass
+        {
+            // 阴影ShadowMap生成Pass
+            Name "JoyShadowCaster"
+            Tags { "LightMode" = "ShadowCaster" }
+
+            Cull Back
+
+            HLSLPROGRAM
+            #pragma vertex ShadowVertMain
+            #pragma fragment ShadowFragmentMain
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+            };
+
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+            };
+
+            Varyings ShadowVertMain(Attributes input)
+            {
+                Varyings output;
+                float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                output.positionHCS = TransformWorldToHClip(positionWS);
+                return output;
+            }
+
+            half4 ShadowFragmentMain(Varyings input) : SV_TARGET
+            {
+                return half4(0, 0, 0, 1);
             }
 
             ENDHLSL
