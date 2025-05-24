@@ -18,7 +18,6 @@ Shader "JoyURP/JoyURP_SimpleLit"
         _AlphaTest ("AlphaTest", Float) = 0.0 // 是否开启AlphaTest
         _ApphaThreshold ("Alpha Threshold", Range(0.0, 1.0)) = 0.0 // AlphaTest的临界值
         _QueueOffset ("RenderQueue Offset", Float) = 0.0 // 渲染队列顺序偏移
-
     }
     
     SubShader
@@ -76,7 +75,6 @@ Shader "JoyURP/JoyURP_SimpleLit"
                 float3 normalOS : NORMAL; // 模型空间顶点法线
                 float4 tangentOS : TANGENT; // 模型空间顶点切线，原本切线是3维的，这里使用4维，w分量的作用是确定副切线的方向
                 float2 texcoord : TEXCOORD; // 纹理坐标
-
             };
             // 顶点着色器输入，经过GPU光栅化插值处理后，同时也是像素着色器的输入
             struct Varyings
@@ -90,7 +88,6 @@ Shader "JoyURP/JoyURP_SimpleLit"
                     float3 normalWS : TEXCOORD2;
                 #endif
                 float2 uv : TEXCOORD;   // 纹理坐标
-
             };
             
             // 顶点着色器入口
@@ -168,7 +165,9 @@ Shader "JoyURP/JoyURP_SimpleLit"
             Name "JoyShadowCaster"
             Tags { "LightMode" = "ShadowCaster" }
 
-            Cull Back
+            ZWrite On
+            Blend Off
+            Cull [_CullType]
 
             HLSLPROGRAM
             #pragma vertex ShadowVertMain
