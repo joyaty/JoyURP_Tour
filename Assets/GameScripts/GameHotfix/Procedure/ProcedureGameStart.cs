@@ -23,7 +23,7 @@ namespace Joy.Base.Procedure
         {
             AssetComponent assetComponent = GameEntry.GetComponent<AssetComponent>();
             await assetComponent.LoadSceneAsync("GameMain", LoadSceneMode.Single);
-            GameObject obj = await assetComponent.InstantiateGameObject("Craft");
+            GameObject obj = await assetComponent.InstantiateGameObject("Craft_AlphaClip_JoyURP");
             RotaAnimation rotaAnim = obj.GetComponent<RotaAnimation>();
             rotaAnim.transform.position = new Vector3(0.0f, 0.0f, 1.0f);
         }
